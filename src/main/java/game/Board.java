@@ -73,12 +73,14 @@ public class Board {
 	}
 
 	public void mark(int position, char playerMark) {
-		validateIfMarked(position);
+		validate(position);
 		cells[position] = playerMark;
 		winner = determineWinnerIfPresent();
 	}
 
-	private void validateIfMarked(int position) {
+	private void validate(int position) {
+		if (position < 0 || position >= BOARD_SIZE * BOARD_SIZE)
+			throw new IllegalArgumentException("Invalid position: " + position);
 		if (isMarked(position))
 			throw new IllegalArgumentException("Position " + position + " is already marked.");
 	}

@@ -128,6 +128,21 @@ public class BoardTest {
 		}
 	}
 
+	@Test
+	public void exceptionOnMarkingInvalidPosition() throws Exception {
+		assertExceptionOnInvalidPosition(-1);
+		assertExceptionOnInvalidPosition(9);
+	}
+
+	private void assertExceptionOnInvalidPosition(int position) {
+		try {
+			board.mark(position, 'X');
+			fail("Should throw exception on marking invalid position.");
+		} catch (IllegalArgumentException e) {
+			assertEquals("Invalid position: " + position, e.getMessage());
+		}
+	}
+
 	private void markBoardAtPositions(char marker, int... positions) {
 		for (int position : positions)
 			board.mark(position, marker);
