@@ -7,7 +7,6 @@ public class Board {
 	private static final int BOARD_SIZE = 3;
 	private char[] cells;
 	private char winner;
-	private boolean hasEnded;
 	private Set<int[]> winningPaths;
 
 	public Board() {
