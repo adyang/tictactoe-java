@@ -13,8 +13,10 @@ public class PlayerTest {
 	@Before
 	public void setUp() throws Exception {
 		board = new Board();
-		playerCross = new Player('X', board);
-		playerCircle = new Player('O', board);
+		playerCross = new Player('X');
+		playerCross.setBoard(board);
+		playerCircle = new Player('O');
+		playerCircle.setBoard(board);
 	}
 
 	@Test
