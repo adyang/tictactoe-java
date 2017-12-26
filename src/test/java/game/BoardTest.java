@@ -14,7 +14,7 @@ public class BoardTest {
 
 	@Before
 	public void setUp() throws Exception {
-		board = new Board();
+		board = new ThreeByThreeBoard();
 	}
 
 	@Test
@@ -115,6 +115,25 @@ public class BoardTest {
 		markBoardAtPositions('X', 2, 4, 6);
 		markBoardAtPositions('O', 3, 5);
 		assertEquals('X', board.getWinner());
+	}
+
+	@Test
+	public void isValid_emptyPosition() throws Exception {
+		assertTrue(board.isValid(0));
+	}
+
+	@Test
+	public void isNotValid_nonEmptyPosition() throws Exception {
+		board.mark(0, 'X');
+		board.mark(5, 'O');
+		assertFalse(board.isValid(0));
+		assertFalse(board.isValid(5));
+	}
+
+	@Test
+	public void isNotValid_outOfRange() throws Exception {
+		assertFalse(board.isValid(10));
+		assertFalse(board.isValid(-1));
 	}
 
 	@Test

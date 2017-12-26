@@ -1,7 +1,7 @@
 package game;
 
-public class Game {
-	private Board board;
+public abstract class Game {
+	protected Board board;
 	private Player[] players = new Player[2];
 	private int currentPlayerIdx;
 
@@ -11,31 +11,34 @@ public class Game {
 		this.players[1] = playerTwo;
 	}
 
-	public char[] getBoardStatus() {
-		return board.getStatus();
+	public void start() {
+		printWelcome();
+		while (!board.hasEnded()) {
+			printBoardStatus();
+			printCurrentTurn(getCurrentPlayer());
+			makeCurrentPlayerMove();
+		}
+		printEndStatus();
 	}
 
-	public Player getCurrentPlayer() {
+	private Player getCurrentPlayer() {
 		return players[currentPlayerIdx];
 	}
 
-	public void makeMove(int position) {
-		players[currentPlayerIdx].markBoard(position);
-		currentPlayerIdx = (currentPlayerIdx + 1) % 2;
+	private void makeCurrentPlayerMove() {
+		players[currentPlayerIdx].makeMove();
+		currentPlayerIdx = nextPlayerIdx();
 	}
 
-	public boolean hasEnded() {
-		return board.hasEnded();
+	private int nextPlayerIdx() {
+		return (currentPlayerIdx + 1) % players.length;
 	}
 
-	public boolean hasWinner() {
-		return board.hasWinner();
-	}
+	abstract protected void printWelcome();
 
-	public Player getWinner() {
-		for (Player player : players)
-			if (player.getMarker() == board.getWinner())
-				return player;
-		return null;
-	}
+	abstract protected void printBoardStatus();
+
+	abstract protected void printCurrentTurn(Player currentPlayer);
+
+	abstract protected void printEndStatus();
 }

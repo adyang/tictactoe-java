@@ -1,82 +1,187 @@
 package game;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Queue;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class GameTest {
-	private Board board;
-	private Player playerTwo;
-	private Player playerOne;
-	private Game game;
+	private TestBoard board;
+	private TestPlayer playerTwo;
+	private TestPlayer playerOne;
+	private TestGame game;
 
 	@Before
 	public void setUp() throws Exception {
-		board = new Board();
-		playerOne = new Player('X', board);
-		playerTwo = new Player('O', board);
-		game = new Game(board, playerOne, playerTwo);
+		setUpTestGame();
+		setUpPlayerMoves();
+	}
+
+	private void setUpTestGame() {
+		board = new TestBoard();
+		playerOne = new TestPlayer('X', board);
+		playerTwo = new TestPlayer('O', board);
+		game = new TestGame(board, playerOne, playerTwo);
+	}
+
+	private void setUpPlayerMoves() {
+		playerOne.enqueueMoves(1, 2, 5);
+		playerTwo.enqueueMoves(3, 4);
 	}
 
 	@Test
-	public void viewBoardStatus() throws Exception {
-		char[] statusCells = game.getBoardStatus();
-		for (char cell : statusCells)
-			assertEquals(0, cell);
+	public void printWelcome() throws Exception {
+		board.turnsToRun = 0;
+		game.start();
+		assertTrue(game.printWelcomeCalled);
 	}
 
 	@Test
-	public void alternateTurns() throws Exception {
-		assertSame(playerOne, game.getCurrentPlayer());
-		game.makeMove(0);
-		assertSame(playerTwo, game.getCurrentPlayer());
-		game.makeMove(1);
-		assertSame(playerOne, game.getCurrentPlayer());
+	public void boardEnds() throws Exception {
+		board.turnsToRun = 0;
+		game.start();
+		assertTrue(game.printEndStatusCalled);
 	}
 
 	@Test
-	public void makeMoves() throws Exception {
-		game.makeMove(0);
-		game.makeMove(1);
-		game.makeMove(2);
-		game.makeMove(6);
-		game.makeMove(8);
-		char[] statusCells = game.getBoardStatus();
-		assertEquals('X', statusCells[0]);
-		assertEquals('O', statusCells[1]);
-		assertEquals('X', statusCells[2]);
-		assertEquals('O', statusCells[6]);
-		assertEquals('X', statusCells[8]);
+	public void oneTurn_printBoardStatusOnce() throws Exception {
+		board.turnsToRun = 1;
+		game.start();
+		assertEquals(1, game.printBoardStatusCount);
 	}
 
 	@Test
-	public void gameHasWinner() throws Exception {
-		game.makeMove(0);
-		game.makeMove(3);
-		game.makeMove(1);
-		game.makeMove(4);
-		game.makeMove(2);
-		assertTrue(game.hasEnded());
-		assertTrue(game.hasWinner());
-		assertEquals(playerOne, game.getWinner());
+	public void threeTurns_printBoardStatusThrice() throws Exception {
+		board.turnsToRun = 3;
+		game.start();
+		assertEquals(3, game.printBoardStatusCount);
 	}
 
 	@Test
-	public void gameIsDraw() throws Exception {
-		game.makeMove(0);
-		game.makeMove(2);
-		game.makeMove(1);
-		game.makeMove(3);
-		game.makeMove(4);
-		game.makeMove(7);
-		game.makeMove(5);
-		game.makeMove(8);
-		game.makeMove(6);
-		assertTrue(game.hasEnded());
-		assertFalse(game.hasWinner());
+	public void printTurnPlayer() throws Exception {
+		board.turnsToRun = 1;
+		game.start();
+		assertEquals(playerOne, game.lastPlayerPrinted);
+	}
+
+	@Test
+	public void playersAlternateTurns() throws Exception {
+		board.turnsToRun = 5;
+		game.start();
+		assertEquals(3, playerOne.makeMoveCount);
+		assertEquals(2, playerTwo.makeMoveCount);
+		assertEquals(Arrays.asList(1, 3, 2, 4, 5), board.markedPositionsInOrder);
+	}
+
+	private static class TestGame extends Game {
+		Player lastPlayerPrinted;
+		boolean printWelcomeCalled;
+		int printBoardStatusCount;
+		boolean printEndStatusCalled;
+
+		public TestGame(Board board, Player playerOne, Player playerTwo) {
+			super(board, playerOne, playerTwo);
+		}
+
+		@Override
+		protected void printWelcome() {
+			this.printWelcomeCalled = true;
+		}
+
+		@Override
+		protected void printBoardStatus() {
+			this.printBoardStatusCount++;
+		}
+
+		@Override
+		protected void printCurrentTurn(Player currentPlayer) {
+			this.lastPlayerPrinted = currentPlayer;
+		}
+
+		@Override
+		protected void printEndStatus() {
+			this.printEndStatusCalled = true;
+		}
+	}
+
+	private static class TestBoard implements Board {
+		int turnsToRun;
+		private List<Integer> markedPositionsInOrder = new ArrayList<>();
+
+		@Override
+		public char[] getStatus() {
+			return null;
+		}
+
+		@Override
+		public void mark(int position, char playerMark) {
+			markedPositionsInOrder.add(position);
+		}
+
+		@Override
+		public boolean hasWinner() {
+			return false;
+		}
+
+		@Override
+		public char getWinner() {
+			return 0;
+		}
+
+		@Override
+		public boolean hasEnded() {
+			if (turnsToRun == 0) {
+				return true;
+			} else {
+				turnsToRun--;
+				return false;
+			}
+		}
+
+		@Override
+		public int size() {
+			return 0;
+		}
+
+		@Override
+		public boolean isValid(int position) {
+			return false;
+		}
+	}
+
+	public static class TestPlayer implements Player {
+		int makeMoveCount;
+		Queue<Integer> movesQueue;
+		private char marker;
+		private Board board;
+
+		public TestPlayer(char marker, Board board) {
+			this.movesQueue = new ArrayDeque<>();
+			this.marker = marker;
+			this.board = board;
+		}
+
+		public void enqueueMoves(int... moves) {
+			for (int m : moves)
+				movesQueue.add(m);
+		}
+
+		@Override
+		public char getMarker() {
+			return marker;
+		}
+
+		@Override
+		public void makeMove() {
+			makeMoveCount++;
+			board.mark(movesQueue.remove(), marker);
+		}
 	}
 }
