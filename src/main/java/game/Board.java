@@ -14,4 +14,8 @@ public interface Board {
 	int size();
 
 	boolean isValid(int position);
+
+	boolean isMarked(int i);
+
+	Board copy();
 }

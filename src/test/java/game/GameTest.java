@@ -154,6 +154,16 @@ public class GameTest {
 		public boolean isValid(int position) {
 			return false;
 		}
+
+		@Override
+		public boolean isMarked(int i) {
+			return false;
+		}
+
+		@Override
+		public Board copy() {
+			return null;
+		}
 	}
 
 	public static class TestPlayer implements Player {

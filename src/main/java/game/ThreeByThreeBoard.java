@@ -118,8 +118,16 @@ public class ThreeByThreeBoard implements Board {
 		return true;
 	}
 
-	private boolean isMarked(int position) {
+	public boolean isMarked(int position) {
 		return cells[position] != 0;
+	}
+
+	@Override
+	public Board copy() {
+		Board copy = new ThreeByThreeBoard();
+		for (int i = 0; i < this.cells.length; i++)
+			copy.mark(i, this.cells[i]);
+		return copy;
 	}
 
 	private boolean isSameMark(int positionOne, int positionTwo) {
