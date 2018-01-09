@@ -1,5 +1,8 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface Board {
 	char[] getStatus();
 
@@ -18,4 +21,6 @@ public interface Board {
 	boolean isMarked(int i);
 
 	Board copy();
+
+	List<Integer> possibleMoves();
 }

@@ -1,6 +1,8 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ThreeByThreeBoard implements Board {
@@ -155,4 +157,14 @@ public class ThreeByThreeBoard implements Board {
 	public int size() {
 		return BOARD_SIZE;
 	}
+
+	@Override
+	public List<Integer> possibleMoves() {
+        List<Integer> possibleMoves = new ArrayList<>();
+        for (int i = 0; i < size() * size(); i++) {
+            if (!isMarked(i))
+                possibleMoves.add(i);
+        }
+        return possibleMoves;
+    }
 }

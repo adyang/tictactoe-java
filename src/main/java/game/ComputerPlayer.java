@@ -1,9 +1,12 @@
 package game;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ComputerPlayer implements Player {
+    public static final int STARTING_DEPTH = 0;
+    public static final int LOSE_VALUE = -1000;
+    public static final int WIN_VALUE = 1000;
+    public static final int DRAW_VALUE = 0;
     private final char marker;
     private final Board board;
     private final char opponentMarker;
@@ -21,18 +24,22 @@ public class ComputerPlayer implements Player {
 
     @Override
     public void makeMove() {
-        List<Integer> moves = possibleMoves(board);
+        board.mark(miniMaxDecision(), this.getMarker());
+    }
+
+    private int miniMaxDecision() {
+        List<Integer> moves = board.possibleMoves();
         int bestMoveSoFar = moves.get(0);
         int bestValueSoFar = Integer.MIN_VALUE;
         for (int move : moves) {
             Board draftBoard = playDraftMove(board, move, this.getMarker());
-            int currValue = minValue(draftBoard, 0);
+            int currValue = miniMaxValue(draftBoard, STARTING_DEPTH, opponentMarker);
             if (currValue > bestValueSoFar) {
                 bestValueSoFar = currValue;
                 bestMoveSoFar = move;
             }
         }
-        board.mark(bestMoveSoFar, getMarker());
+        return bestMoveSoFar;
     }
 
     private Board playDraftMove(Board board, int move, char marker) {
@@ -41,45 +48,56 @@ public class ComputerPlayer implements Player {
         return draftBoard;
     }
 
-    private int minValue(Board board, int depth) {
+    private int miniMaxValue(Board board, int depth, char playerMarker) {
         if (board.hasEnded())
-            return utilityOf(board, depth);
+            return finalValueOf(board, depth);
 
-        int minSoFar = Integer.MAX_VALUE;
-        for (Integer move : possibleMoves(board)) {
-            Board draftBoard = playDraftMove(board, move, opponentMarker);
-            minSoFar = Math.min(maxValue(draftBoard, depth + 1 ), minSoFar);
-        }
-        return minSoFar;
+        return bestValueForPlayer(board, depth, playerMarker);
     }
 
-    private int maxValue(Board board, int depth) {
-        if (board.hasEnded())
-            return utilityOf(board, depth);
+    private int finalValueOf(Board board, int depth) {
+        if (board.hasWinner() && isThisPlayer(board.getWinner()))
+            return lessValueIfLongerToWin(depth);
+        else if (board.hasWinner())
+            return moreValueIfLongerToLose(depth);
+        else
+            return DRAW_VALUE;
+    }
 
+    private boolean isThisPlayer(char marker) {
+        return marker == this.getMarker();
+    }
+
+    private int lessValueIfLongerToWin(int turnsToWin) {
+        return WIN_VALUE - turnsToWin;
+    }
+
+    private int moreValueIfLongerToLose(int turnsToLose) {
+        return LOSE_VALUE + turnsToLose;
+    }
+
+    private int bestValueForPlayer(Board board, int depth, char playerMarker) {
+        if (isThisPlayer(playerMarker))
+            return thisPlayerBestValue(board, depth);
+        else
+            return opponentBestValue(board, depth);
+    }
+
+    private int thisPlayerBestValue(Board board, int depth) {
         int maxSoFar = Integer.MIN_VALUE;
-        for (Integer move : possibleMoves(board)) {
-            Board draftBoard = playDraftMove(board, move, getMarker());
-            maxSoFar = Math.max(minValue(draftBoard, depth + 1), maxSoFar);
+        for (Integer move : board.possibleMoves()) {
+            Board draftBoard = playDraftMove(board, move, this.getMarker());
+            maxSoFar = Math.max(miniMaxValue(draftBoard, depth + 1, opponentMarker), maxSoFar);
         }
         return maxSoFar;
     }
 
-    private int utilityOf(Board board, int depth) {
-        if (board.hasWinner() && board.getWinner() == this.getMarker())
-            return 1000 - depth;
-        else if (board.hasWinner())
-            return depth - 1000;
-        else
-            return 0;
-    }
-
-    private List<Integer> possibleMoves(Board board) {
-        List<Integer> possibleMoves = new ArrayList<>();
-        for (int i = 0; i < board.size() * board.size(); i++) {
-            if (!board.isMarked(i))
-                possibleMoves.add(i);
+    private int opponentBestValue(Board board, int depth) {
+        int minSoFar = Integer.MAX_VALUE;
+        for (Integer move : board.possibleMoves()) {
+            Board draftBoard = playDraftMove(board, move, opponentMarker);
+            minSoFar = Math.min(miniMaxValue(draftBoard, depth + 1, this.getMarker()), minSoFar);
         }
-        return possibleMoves;
+        return minSoFar;
     }
 }

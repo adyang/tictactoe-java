@@ -164,6 +164,11 @@ public class GameTest {
 		public Board copy() {
 			return null;
 		}
+
+		@Override
+		public List<Integer> possibleMoves() {
+			return null;
+		}
 	}
 
 	public static class TestPlayer implements Player {
