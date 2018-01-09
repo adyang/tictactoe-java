@@ -34,11 +34,11 @@ public abstract class Game {
 		return (currentPlayerIdx + 1) % players.length;
 	}
 
-	abstract protected void printWelcome();
+	public abstract void printWelcome();
 
-	abstract protected void printBoardStatus();
+	public abstract void printBoardStatus();
 
-	abstract protected void printCurrentTurn(Player currentPlayer);
+	public abstract void printCurrentTurn(Player currentPlayer);
 
-	abstract protected void printEndStatus();
+	public abstract void printEndStatus();
 }

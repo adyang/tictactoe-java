@@ -1,4 +1,6 @@
-package game;
+package boards;
+
+import game.Board;
 
 import java.util.ArrayList;
 import java.util.HashSet;

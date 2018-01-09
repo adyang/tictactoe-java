@@ -91,22 +91,22 @@ public class GameTest {
 		}
 
 		@Override
-		protected void printWelcome() {
+		public void printWelcome() {
 			this.printWelcomeCalled = true;
 		}
 
 		@Override
-		protected void printBoardStatus() {
+		public void printBoardStatus() {
 			this.printBoardStatusCount++;
 		}
 
 		@Override
-		protected void printCurrentTurn(Player currentPlayer) {
+		public void printCurrentTurn(Player currentPlayer) {
 			this.lastPlayerPrinted = currentPlayer;
 		}
 
 		@Override
-		protected void printEndStatus() {
+		public void printEndStatus() {
 			this.printEndStatusCalled = true;
 		}
 	}

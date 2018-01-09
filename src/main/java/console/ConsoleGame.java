@@ -1,4 +1,8 @@
-package game;
+package console;
+
+import game.Board;
+import game.Game;
+import game.Player;
 
 import java.io.PrintStream;
 
@@ -12,7 +16,7 @@ public class ConsoleGame extends Game {
 	}
 
 	@Override
-	protected void printBoardStatus() {
+	public void printBoardStatus() {
 		clearScreen();
 		printBoard();
 	}
@@ -59,7 +63,7 @@ public class ConsoleGame extends Game {
 	}
 
 	@Override
-	protected void printEndStatus() {
+	public void printEndStatus() {
 		clearScreen();
 		printBoard();
 		printGameOutcome();
@@ -73,13 +77,13 @@ public class ConsoleGame extends Game {
 	}
 
 	@Override
-	protected void printWelcome() {
+	public void printWelcome() {
 		clearScreen();
 		outputStream.println("===== Welcome to Tic-Tac-Toe =====");
 	}
 
 	@Override
-	protected void printCurrentTurn(Player currentPlayer) {
+	public void printCurrentTurn(Player currentPlayer) {
 		outputStream.println(currentPlayer.getMarker() + " Turn");
 	}
 }

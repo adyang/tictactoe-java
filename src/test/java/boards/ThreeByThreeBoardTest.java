@@ -1,14 +1,15 @@
-package game;
+package boards;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import game.Board;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BoardTest {
+public class ThreeByThreeBoardTest {
 	private Board board;
 	private char[] statusCells;
 

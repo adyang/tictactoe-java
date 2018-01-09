@@ -1,4 +1,7 @@
-package game;
+package players;
+
+import game.Board;
+import game.Player;
 
 import java.io.InputStream;
 import java.io.PrintStream;

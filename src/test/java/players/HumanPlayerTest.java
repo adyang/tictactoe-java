@@ -1,4 +1,4 @@
-package game;
+package players;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -9,6 +9,9 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
+import game.Board;
+import game.Player;
+import boards.ThreeByThreeBoard;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

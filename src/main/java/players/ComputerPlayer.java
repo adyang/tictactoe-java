@@ -1,4 +1,7 @@
-package game;
+package players;
+
+import game.Board;
+import game.Player;
 
 import java.util.List;
 
