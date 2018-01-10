@@ -3,11 +3,9 @@ package game;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Queue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,13 +32,6 @@ public class GameTest {
 	private void setUpPlayerMoves() {
 		playerOne.enqueueMoves(1, 2, 5);
 		playerTwo.enqueueMoves(3, 4);
-	}
-
-	@Test
-	public void printWelcome() throws Exception {
-		board.turnsToRun = 0;
-		game.start();
-		assertTrue(game.printWelcomeCalled);
 	}
 
 	@Test
@@ -82,17 +73,11 @@ public class GameTest {
 
 	private static class TestGame extends Game {
 		Player lastPlayerPrinted;
-		boolean printWelcomeCalled;
 		int printBoardStatusCount;
 		boolean printEndStatusCalled;
 
 		public TestGame(Board board, Player playerOne, Player playerTwo) {
 			super(board, playerOne, playerTwo);
-		}
-
-		@Override
-		public void printWelcome() {
-			this.printWelcomeCalled = true;
 		}
 
 		@Override
@@ -168,35 +153,6 @@ public class GameTest {
 		@Override
 		public List<Integer> possibleMoves() {
 			return null;
-		}
-	}
-
-	public static class TestPlayer implements Player {
-		int makeMoveCount;
-		Queue<Integer> movesQueue;
-		private char marker;
-		private Board board;
-
-		public TestPlayer(char marker, Board board) {
-			this.movesQueue = new ArrayDeque<>();
-			this.marker = marker;
-			this.board = board;
-		}
-
-		public void enqueueMoves(int... moves) {
-			for (int m : moves)
-				movesQueue.add(m);
-		}
-
-		@Override
-		public char getMarker() {
-			return marker;
-		}
-
-		@Override
-		public void makeMove() {
-			makeMoveCount++;
-			board.mark(movesQueue.remove(), marker);
 		}
 	}
 }

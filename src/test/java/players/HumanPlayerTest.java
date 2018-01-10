@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
+import console.InputTestUtil;
 import game.Board;
 import game.Player;
 import boards.ThreeByThreeBoard;
@@ -36,32 +37,32 @@ public class HumanPlayerTest {
 
 	@Test
 	public void printInputRequest() throws Exception {
-		makeMoveWithInput(toInputString("5"));
+		makeMoveWithInput("5");
 		assertOutputStreamEquals("Select a number to make a move: ");
 	}
 
 
 	@Test
 	public void readUserInput_validInput() throws Exception {
-		makeMoveWithInput(toInputString("5"));
+		makeMoveWithInput("5");
 		assertEquals('X', board.getStatus()[4]);
 	}
 
 	@Test
 	public void readUserInput_invalidInput() throws Exception {
-		makeMoveWithInput(toInputString("W", "5"));
+		makeMoveWithInput("W", "5");
 		assertOutputStreamContains("Invalid input. Please select an available number from the board.");
 	}
 
 	@Test
 	public void readUserInput_inputOutOfRange() throws Exception {
-		makeMoveWithInput(toInputString("10", "5"));
+		makeMoveWithInput("10", "5");
 		assertOutputStreamContains("Invalid move selected. Please select an available number from the board.");
 	}
 
 	@Test
 	public void readUserInput_validInputAfterReEnter() throws Exception {
-		makeMoveWithInput(toInputString("10", "5"));
+		makeMoveWithInput("10", "5");
 		assertEquals('X', board.getStatus()[4]);
 	}
 
@@ -73,15 +74,16 @@ public class HumanPlayerTest {
 		assertTrue(outputStream.toString(StandardCharsets.UTF_8.name()).contains(expectedMessage));
 	}
 
-	private void makeMoveWithInput(String userInput) {
-		inputStream = new ByteArrayInputStream(
-				String.format(userInput).getBytes(StandardCharsets.UTF_8));
+	private void makeMoveWithInput(String... userInputs) {
+		inputStream = createInputStreamWith(userInputs);
 		player = new HumanPlayer('X', board, inputStream, new PrintStream(outputStream));
 
 		player.makeMove();
 	}
 
-	private String toInputString(String... inputs) {
-		return String.join("%n", inputs) + "%n";
+	private ByteArrayInputStream createInputStreamWith(String[] userInputs) {
+		String inputStr = InputTestUtil.toInputString(userInputs);
+		return new ByteArrayInputStream(
+				String.format(inputStr).getBytes(StandardCharsets.UTF_8));
 	}
 }

@@ -77,12 +77,6 @@ public class ConsoleGame extends Game {
 	}
 
 	@Override
-	public void printWelcome() {
-		clearScreen();
-		outputStream.println("===== Welcome to Tic-Tac-Toe =====");
-	}
-
-	@Override
 	public void printCurrentTurn(Player currentPlayer) {
 		outputStream.println(currentPlayer.getMarker() + " Turn");
 	}

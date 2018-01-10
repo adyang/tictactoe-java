@@ -12,7 +12,6 @@ public abstract class Game {
 	}
 
 	public void start() {
-		printWelcome();
 		while (!board.hasEnded()) {
 			printBoardStatus();
 			printCurrentTurn(getCurrentPlayer());
@@ -33,8 +32,6 @@ public abstract class Game {
 	private int nextPlayerIdx() {
 		return (currentPlayerIdx + 1) % players.length;
 	}
-
-	public abstract void printWelcome();
 
 	public abstract void printBoardStatus();
 

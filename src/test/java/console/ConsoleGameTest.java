@@ -15,7 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.GameTest.TestPlayer;
+import game.TestPlayer;
 
 public class ConsoleGameTest {
 	private static final String NEW_LINE = System.lineSeparator();
@@ -44,13 +44,6 @@ public class ConsoleGameTest {
 	@After
 	public void tearDown() throws Exception {
 		outputStream.close();
-	}
-
-	@Test
-	public void printWelcome() throws Exception {
-		game.printWelcome();
-
-		assertOutputStreamWithClearScreenPrepend("===== Welcome to Tic-Tac-Toe =====" + NEW_LINE);
 	}
 
 	@Test
