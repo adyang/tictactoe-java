@@ -33,9 +33,9 @@ public abstract class Game {
 		return (currentPlayerIdx + 1) % players.length;
 	}
 
-	public abstract void printBoardStatus();
+	protected abstract void printBoardStatus();
 
-	public abstract void printCurrentTurn(Player currentPlayer);
+	protected abstract void printCurrentTurn(Player currentPlayer);
 
-	public abstract void printEndStatus();
+	protected abstract void printEndStatus();
 }

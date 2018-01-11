@@ -16,7 +16,7 @@ public class ConsoleGame extends Game {
 	}
 
 	@Override
-	public void printBoardStatus() {
+	protected void printBoardStatus() {
 		clearScreen();
 		printBoard();
 	}
@@ -63,7 +63,7 @@ public class ConsoleGame extends Game {
 	}
 
 	@Override
-	public void printEndStatus() {
+	protected void printEndStatus() {
 		clearScreen();
 		printBoard();
 		printGameOutcome();
@@ -77,7 +77,7 @@ public class ConsoleGame extends Game {
 	}
 
 	@Override
-	public void printCurrentTurn(Player currentPlayer) {
+	protected void printCurrentTurn(Player currentPlayer) {
 		outputStream.println(currentPlayer.getMarker() + " Turn");
 	}
 }

@@ -8,7 +8,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import game.Board;
-import game.Game;
 import game.Player;
 import boards.ThreeByThreeBoard;
 import org.junit.After;
@@ -30,7 +29,7 @@ public class ConsoleGameTest {
 												"---------" + NEW_LINE +
 												"O | X | O" + NEW_LINE +
 												"The game is a Draw!" + NEW_LINE;
-	private Game game;
+	private ConsoleGame game;
 	private ByteArrayOutputStream outputStream;
 	private Board board;
 
@@ -61,7 +60,6 @@ public class ConsoleGameTest {
 
 		assertOutputStreamWithClearScreenPrepend(EMPTY_BOARD);
 	}
-
 
 	@Test
 	public void printBoardStatus_filledBoard() throws Exception {
