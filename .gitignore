@@ -5,3 +5,6 @@ bin/
 .idea/
 *.iml
 out/
+build/
+.gradle/
+
