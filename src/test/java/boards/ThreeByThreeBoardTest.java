@@ -98,15 +98,8 @@ public class ThreeByThreeBoardTest {
 
 	@Test
 	public void boardIsDrawNoWinner() throws Exception {
-		board.mark(0, 'X');
-		board.mark(1, 'X');
-		board.mark(2, 'O');
-		board.mark(3, 'O');
-		board.mark(4, 'X');
-		board.mark(5, 'X');
-		board.mark(6, 'X');
-		board.mark(7, 'O');
-		board.mark(8, 'O');
+		markBoardAtPositions('X', 0, 1, 4, 5, 6);
+		markBoardAtPositions('O', 2, 3, 7, 8);
 		assertTrue(board.hasEnded());
 		assertFalse(board.hasWinner());
 	}
