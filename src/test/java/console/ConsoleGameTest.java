@@ -46,23 +46,23 @@ public class ConsoleGameTest {
 	}
 
 	@Test
-	public void printCurrentPlayerTurn() throws Exception {
+	public void displayCurrentPlayerTurn() throws Exception {
 		Player player = new TestPlayer('X', board);
 
-		game.printCurrentTurn(player);
+		game.displayCurrentTurn(player);
 
 		assertOutputStream("X Turn" + NEW_LINE);
 	}
 
 	@Test
-	public void printBoardStatus_emptyBoard() throws Exception {
-		game.printBoardStatus();
+	public void displayBoardStatus_emptyBoard() throws Exception {
+		game.displayBoardStatus();
 
 		assertOutputStreamWithClearScreenPrepend(EMPTY_BOARD);
 	}
 
 	@Test
-	public void printBoardStatus_filledBoard() throws Exception {
+	public void displayBoardStatus_filledBoard() throws Exception {
 		board.mark(0, 'X');
 		board.mark(1, 'O');
 		board.mark(2, 'X');
@@ -72,7 +72,7 @@ public class ConsoleGameTest {
 		board.mark(6, 'O');
 		board.mark(7, 'X');
 
-		game.printBoardStatus();
+		game.displayBoardStatus();
 		
 		String expectedString = "X | O | X" + NEW_LINE +
 								"---------" + NEW_LINE +
@@ -83,7 +83,7 @@ public class ConsoleGameTest {
 	}
 
 	@Test
-	public void printEndStatus_crossWins() throws Exception {
+	public void displayEndStatus_crossWins() throws Exception {
 		board.mark(0, 'X');
 		board.mark(1, 'O');
 		board.mark(2, 'X');
@@ -94,7 +94,7 @@ public class ConsoleGameTest {
 		board.mark(7, 'X');
 		board.mark(8, 'X');
 		
-		game.printEndStatus();
+		game.displayEndStatus();
 		
 		String expectedString = "X | O | X" + NEW_LINE +
 								"---------" + NEW_LINE +
@@ -106,7 +106,7 @@ public class ConsoleGameTest {
 	}
 
 	@Test
-	public void printEndStatus_circleWins() throws Exception {
+	public void displayEndStatus_circleWins() throws Exception {
 		board.mark(1, 'X');
 		board.mark(0, 'O');
 		board.mark(2, 'X');
@@ -116,7 +116,7 @@ public class ConsoleGameTest {
 		board.mark(8, 'X');
 		board.mark(6, 'O');
 		
-		game.printEndStatus();
+		game.displayEndStatus();
 		
 		String expectedString = "O | X | X" + NEW_LINE +
 								"---------" + NEW_LINE +
@@ -128,7 +128,7 @@ public class ConsoleGameTest {
 	}
 
 	@Test
-	public void printEndStatus_drawGame() throws Exception {
+	public void displayEndStatus_drawGame() throws Exception {
 		board.mark(0, 'X');
 		board.mark(1, 'O');
 		board.mark(2, 'X');
@@ -139,23 +139,23 @@ public class ConsoleGameTest {
 		board.mark(7, 'X');
 		board.mark(8, 'O');
 		
-		game.printEndStatus();
+		game.displayEndStatus();
 		
 		assertOutputStreamWithClearScreenPrepend(DRAW_BOARD);
 	}
 	
 
 	@Test
-	public void printBoardStatus_clearOutputForEachCall() throws Exception {
-		game.printBoardStatus();
-		game.printBoardStatus();
+	public void displayBoardStatus_clearOutputForEachCall() throws Exception {
+		game.displayBoardStatus();
+		game.displayBoardStatus();
 
 		assertOutputStream(ConsoleGame.ANSI_CLEAR_SCREEN + EMPTY_BOARD + ConsoleGame.ANSI_CLEAR_SCREEN + EMPTY_BOARD);
 	}
 
 	@Test
-	public void printEndStatus_clearOutputForEachCall() throws Exception {
-		game.printBoardStatus();
+	public void displayEndStatus_clearOutputForEachCall() throws Exception {
+		game.displayBoardStatus();
 		board.mark(0, 'X');
 		board.mark(1, 'O');
 		board.mark(2, 'X');
@@ -165,7 +165,7 @@ public class ConsoleGameTest {
 		board.mark(6, 'O');
 		board.mark(7, 'X');
 		board.mark(8, 'O');
-		game.printEndStatus();
+		game.displayEndStatus();
 		
 		assertOutputStream(ConsoleGame.ANSI_CLEAR_SCREEN + EMPTY_BOARD + ConsoleGame.ANSI_CLEAR_SCREEN + DRAW_BOARD);
 	}

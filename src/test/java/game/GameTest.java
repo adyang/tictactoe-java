@@ -81,17 +81,17 @@ public class GameTest {
 		}
 
 		@Override
-		public void printBoardStatus() {
+		public void displayBoardStatus() {
 			this.printBoardStatusCount++;
 		}
 
 		@Override
-		public void printCurrentTurn(Player currentPlayer) {
+		public void displayCurrentTurn(Player currentPlayer) {
 			this.lastPlayerPrinted = currentPlayer;
 		}
 
 		@Override
-		public void printEndStatus() {
+		public void displayEndStatus() {
 			this.printEndStatusCalled = true;
 		}
 	}

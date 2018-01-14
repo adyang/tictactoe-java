@@ -1,12 +1,10 @@
 package console;
 
+import boards.ThreeByThreeBoard;
 import game.Board;
 import game.Game;
 import game.Player;
-import boards.ThreeByThreeBoard;
-import players.ComputerPlayer;
 import players.DefaultPlayerFactory;
-import players.HumanPlayer;
 
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -72,7 +70,7 @@ public class TicTacToeApplication {
         return createGame(board, playerOne, playerTwo);
     }
 
-    private static ThreeByThreeBoard configureBoard() {
+    private ThreeByThreeBoard configureBoard() {
         return new ThreeByThreeBoard();
     }
 

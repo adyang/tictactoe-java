@@ -13,11 +13,11 @@ public abstract class Game {
 
 	public void start() {
 		while (!board.hasEnded()) {
-			printBoardStatus();
-			printCurrentTurn(getCurrentPlayer());
+			displayBoardStatus();
+			displayCurrentTurn(getCurrentPlayer());
 			makeCurrentPlayerMove();
 		}
-		printEndStatus();
+		displayEndStatus();
 	}
 
 	private Player getCurrentPlayer() {
@@ -33,9 +33,9 @@ public abstract class Game {
 		return (currentPlayerIdx + 1) % players.length;
 	}
 
-	protected abstract void printBoardStatus();
+	protected abstract void displayBoardStatus();
 
-	protected abstract void printCurrentTurn(Player currentPlayer);
+	protected abstract void displayCurrentTurn(Player currentPlayer);
 
-	protected abstract void printEndStatus();
+	protected abstract void displayEndStatus();
 }
