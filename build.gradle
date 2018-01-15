@@ -5,10 +5,34 @@ repositories {
     jcenter()
 }
 
+sourceSets {
+    integrationTest
+}
+
 dependencies {
     testCompile 'junit:junit:4.12'
+    integrationTestCompile 'org.testfx:testfx-core:4.0.10-alpha'
+    integrationTestCompile 'org.testfx:testfx-junit:4.0.10-alpha'
+
+    integrationTestCompile configurations.testCompile
+    integrationTestRuntime configurations.testRuntime
 }
 
 mainClassName = 'console.TicTacToeApplication'
-
 run.standardInput = System.in
+
+task integrationTest(type: Test, group: 'verification', description: 'Runs the integration tests.') {
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    mustRunAfter test
+}
+check.dependsOn integrationTest
+
+tasks.withType(Test) {
+    reports.html.destination = file("${reportsDir}/${name}")
+    reports.junitXml.destination = file("${testResultsDir}/${name}")
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+}
