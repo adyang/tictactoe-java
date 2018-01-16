@@ -6,16 +6,16 @@ repositories {
 }
 
 sourceSets {
-    integrationTest
+    integrationTest {
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
 }
 
 dependencies {
     testCompile 'junit:junit:4.12'
     integrationTestCompile 'org.testfx:testfx-core:4.0.10-alpha'
     integrationTestCompile 'org.testfx:testfx-junit:4.0.10-alpha'
-
-    integrationTestCompile configurations.testCompile
-    integrationTestRuntime configurations.testRuntime
 }
 
 mainClassName = 'console.TicTacToeApplication'
@@ -36,3 +36,13 @@ tasks.withType(Test) {
         exceptionFormat = 'full'
     }
 }
+
+def workaroundToFixIdeaIdeNotDetectingIntegrationTestSourceSets = {
+    apply plugin: 'idea'
+    idea {
+        module {
+            testSourceDirs += project.sourceSets.integrationTest.java.srcDirs
+            testSourceDirs += project.sourceSets.integrationTest.resources.srcDirs
+        }
+    }
+}()
