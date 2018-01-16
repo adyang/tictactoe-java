@@ -12,6 +12,11 @@ sourceSets {
     }
 }
 
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
 dependencies {
     testCompile 'junit:junit:4.12'
     integrationTestCompile 'org.testfx:testfx-core:4.0.10-alpha'
