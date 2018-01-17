@@ -50,13 +50,9 @@ public class JavaFxView implements View {
 
     private Label createCell(DisplayCell displayCell) {
         Label cell = new Label(displayCell.marker);
-        cell.setId("cell-" + indexPos(displayCell));
+        cell.setId("cell-" + displayCell.idxPos);
         cell.getStyleClass().add("cell");
         return cell;
-    }
-
-    private int indexPos(DisplayCell displayCell) {
-        return displayCell.xPos + displayCell.yPos * 3;
     }
 
     private void addHandler(Label cell, Runnable handler) {

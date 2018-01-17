@@ -79,7 +79,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
     @Test
     public void displayBoard_whenDisplayCellHasNoHandler_shouldNotTriggerExceptionOnClick() {
         DisplayBoard board = new DisplayBoard();
-        board.cells.add(new DisplayCell("X", 0, 0));
+        board.cells.add(new DisplayCell("X", 0, 0, 0));
 
         view.displayBoard(board);
 
@@ -146,10 +146,17 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
 
     private DisplayBoard createBoard(String... cells) {
         DisplayBoard board = new DisplayBoard();
-        for (int y = 0, cellIdx = 0; y < BOARD_SIZE; y++)
-            for (int x = 0; x < BOARD_SIZE; x++)
-                board.cells.add(new DisplayCell(cells[cellIdx++], x, y));
+        for (int i = 0; i < cells.length; i++)
+            board.cells.add(new DisplayCell(cells[i], i, xPos(i), yPos(i)));
         return board;
+    }
+
+    private int xPos(int i) {
+        return i % BOARD_SIZE;
+    }
+
+    private int yPos(int i) {
+        return i / BOARD_SIZE;
     }
 
     private void assertGridPosition(String cellIdSelector, int columnIdx, int rowIdx) {
@@ -161,20 +168,12 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
     private DisplayBoard createBoardWithTriggerHandlerCells(List<Integer> triggeredCells) {
         DisplayBoard board = new DisplayBoard();
         for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
-            DisplayCell cell = new DisplayCell(" ", xPos(i), yPos(i));
+            DisplayCell cell = new DisplayCell(" ", i, xPos(i), yPos(i));
             final int cellNum = i;
             cell.actionHandler = () -> triggeredCells.add(cellNum);
             board.cells.add(cell);
         }
         return board;
-    }
-
-    private int xPos(int i) {
-        return i % BOARD_SIZE;
-    }
-
-    private int yPos(int i) {
-        return i / BOARD_SIZE;
     }
 
     private void clickOnAllCells() {

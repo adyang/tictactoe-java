@@ -33,7 +33,7 @@ public class GuiGame extends Game {
     }
 
     private DisplayCell newDisplayCell(int i, char[] cells) {
-        DisplayCell displayCell = new DisplayCell(cellAt(i, cells), xPos(i), yPos(i));
+        DisplayCell displayCell = new DisplayCell(cellAt(i, cells), i, xPos(i), yPos(i));
         displayCell.actionHandler = board.isMarked(i) ? null : cellHandlerFor(i);
         return displayCell;
     }

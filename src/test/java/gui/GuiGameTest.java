@@ -54,7 +54,7 @@ public class GuiGameTest {
         for (DisplayCell cell : displayBoard.cells) {
             cell.actionHandler.run();
             int move = moveQueue.remove();
-            assertEquals(absolutePosition(cell), move);
+            assertEquals(cell.idxPos, move);
         }
     }
 
@@ -126,13 +126,9 @@ public class GuiGameTest {
     private void assertCellsHaveMarker(String expectedMarker, int... expectedPositions) {
         DisplayBoard displayBoard = mockView.displayBoard;
         for (DisplayCell cell: displayBoard.cells) {
-            if (Arrays.asList(expectedPositions).contains(absolutePosition(cell)))
+            if (Arrays.asList(expectedPositions).contains(cell.idxPos))
                 assertEquals(expectedMarker, cell.marker);
         }
-    }
-
-    private int absolutePosition(DisplayCell cell) {
-        return cell.xPos + cell.yPos * board.size();
     }
 
     private void markBoardAtPositions(char marker, int... positions) {
