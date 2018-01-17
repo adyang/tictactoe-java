@@ -8,19 +8,27 @@ import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
-import static gui.DisplayBoard.*;
-import static org.junit.Assert.assertEquals;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static gui.DisplayBoard.DisplayCell;
+import static org.junit.Assert.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.hasText;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 public class JavaFxViewIntegrationTest extends ApplicationTest {
     private static final int BOARD_SIZE = 3;
     private View view;
     private Scene scene;
+    private Group dummyGroup;
 
     @Override
     public void start(Stage stage) {
-        Group dummyGroup = new Group();
+        dummyGroup = new Group();
         scene = new Scene(dummyGroup, 500, 500);
         stage.setScene(scene);
         stage.show();
@@ -36,6 +44,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
 
         view.displayBoard(board);
 
+        waitForFxEvents();
         GridPane boardGrid = lookup("#board").query();
         assertEquals(9, boardGrid.getChildren().size());
     }
@@ -49,17 +58,90 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
 
         view.displayBoard(board);
 
-        Label cell = lookup("#cell-5").query();
+        waitForFxEvents();
         verifyThat("#cell-5", hasText("X"));
-        assertGridPosition(cell, 2, 1);
-        cell = lookup("#cell-6").query();
+        assertGridPosition("#cell-5", 2, 1);
         verifyThat("#cell-6", hasText("O"));
-        assertGridPosition(cell, 0, 2);
+        assertGridPosition("#cell-6", 0, 2);
     }
 
-    private void assertGridPosition(Label cell, int expectedColumnIdx, int expectedRowIdx) {
-        assertEquals(expectedColumnIdx, GridPane.getColumnIndex(cell).intValue());
-        assertEquals(expectedRowIdx, GridPane.getRowIndex(cell).intValue());
+    @Test
+    public void displayBoard_shouldTriggerHandlerOnClick() {
+        List<Integer> triggeredCells = new ArrayList<>();
+        DisplayBoard board = createBoardWithTriggerHandlerCells(triggeredCells);
+
+        displayAndClickOnAllCells(board);
+
+        waitForFxEvents();
+        assertEquals(listOfIntegersInRange(0, 9), triggeredCells);
+    }
+
+    @Test
+    public void displayBoard_whenDisplayCellHasNoHandler_shouldNotTriggerExceptionOnClick() {
+        DisplayBoard board = new DisplayBoard();
+        board.cells.add(new DisplayCell("X", 0, 0));
+
+        view.displayBoard(board);
+
+        waitForFxEvents();
+        clickOn("#cell-0");
+    }
+
+    @Test
+    public void displayBoard_whenCellClicked_shouldNotTriggerFurtherHandler() {
+        List<Integer> triggeredCells = new ArrayList<>();
+        DisplayBoard board = createBoardWithTriggerHandlerCells(triggeredCells);
+
+        view.displayBoard(board);
+        waitForFxEvents();
+        clickOn("#cell-0");
+        clickOnAllCells();
+
+        assertEquals(Arrays.asList(0), triggeredCells);
+    }
+
+    @Test
+    public void displayBoard_shouldSwitchSceneRootToGame() {
+        DisplayBoard board = new DisplayBoard();
+
+        view.displayBoard(board);
+
+        waitForFxEvents();
+        assertNotSame(dummyGroup, scene.getRoot());
+        assertTrue(lookup("#game-scene").tryQuery().isPresent());
+    }
+
+    @Test
+    public void displayCurrentMarker_shouldDisplayCurrentMarkerMessage() {
+        DisplayBoard board = new DisplayBoard();
+
+        view.displayBoard(board);
+        view.displayCurrentMarker("X");
+
+        waitForFxEvents();
+        verifyThat("#game-message", hasText("X player's Turn"));
+    }
+
+    @Test
+    public void displayWinner_shouldDisplayWinnerMessage() {
+        DisplayBoard board = new DisplayBoard();
+
+        view.displayBoard(board);
+        view.displayWinner("X");
+
+        waitForFxEvents();
+        verifyThat("#game-message", hasText("X has Won!"));
+    }
+
+    @Test
+    public void displayDraw_shouldDisplayDrawMessage() {
+        DisplayBoard board = new DisplayBoard();
+
+        view.displayBoard(board);
+        view.displayDraw();
+
+        waitForFxEvents();
+        verifyThat("#game-message", hasText("The game is a Draw!"));
     }
 
     private DisplayBoard createBoard(String... cells) {
@@ -68,5 +150,47 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
             for (int x = 0; x < BOARD_SIZE; x++)
                 board.cells.add(new DisplayCell(cells[cellIdx++], x, y));
         return board;
+    }
+
+    private void assertGridPosition(String cellIdSelector, int columnIdx, int rowIdx) {
+        Label cell = lookup(cellIdSelector).query();
+        assertEquals(columnIdx, GridPane.getColumnIndex(cell).intValue());
+        assertEquals(rowIdx, GridPane.getRowIndex(cell).intValue());
+    }
+
+    private DisplayBoard createBoardWithTriggerHandlerCells(List<Integer> triggeredCells) {
+        DisplayBoard board = new DisplayBoard();
+        for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
+            DisplayCell cell = new DisplayCell(" ", xPos(i), yPos(i));
+            final int cellNum = i;
+            cell.actionHandler = () -> triggeredCells.add(cellNum);
+            board.cells.add(cell);
+        }
+        return board;
+    }
+
+    private int xPos(int i) {
+        return i % BOARD_SIZE;
+    }
+
+    private int yPos(int i) {
+        return i / BOARD_SIZE;
+    }
+
+    private void clickOnAllCells() {
+        for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; i++)
+            clickOn("#cell-" + i);
+    }
+
+    private void displayAndClickOnAllCells(DisplayBoard board) {
+        for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
+            view.displayBoard(board);
+            waitForFxEvents();
+            clickOn("#cell-" + i);
+        }
+    }
+
+    private List<Integer> listOfIntegersInRange(int startInclusive, int endExclusive) {
+        return IntStream.range(startInclusive, endExclusive).boxed().collect(Collectors.toList());
     }
 }
