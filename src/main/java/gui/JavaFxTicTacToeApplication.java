@@ -7,11 +7,14 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import players.GuiHumanPlayer;
 import players.HumanPlayer;
 
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.*;
 
 public class JavaFxTicTacToeApplication extends Application {
+
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public static void main(String[] args) {
         launch(args);
@@ -24,11 +27,13 @@ public class JavaFxTicTacToeApplication extends Application {
         View view = new JavaFxView(scene);
 
         GuiGame game = configureNewGame(view);
-        game.displayBoardStatus();
-        game.displayCurrentTurn(new HumanPlayer('X', null, System.in, System.out));
+        executor.execute(game::start);
+
         stage.setTitle("Tic-Tac-Toe");
         stage.setScene(scene);
         stage.show();
+
+        executor.shutdown();
     }
 
     private String getClasspathResourceUrl(String resourcePath) {
@@ -37,10 +42,10 @@ public class JavaFxTicTacToeApplication extends Application {
 
     private GuiGame configureNewGame(View view) {
         Board board = new ThreeByThreeBoard();
-        board.mark(0, 'O');
-        Player playerOne = new HumanPlayer('O', board, System.in, System.out);
-        Player playerTwo = new HumanPlayer('X', board, System.in, System.out);
-        return new GuiGame(board, playerOne, playerTwo, view, new ArrayBlockingQueue<>(1));
+        ArrayBlockingQueue<Integer> moveQueue = new ArrayBlockingQueue<>(1);
+        Player playerOne = new GuiHumanPlayer('X', board, moveQueue);
+        Player playerTwo = new GuiHumanPlayer('O', board, moveQueue);
+        return new GuiGame(board, playerOne, playerTwo, view, moveQueue);
     }
 
     private DisplayBoard createBoard(String... cells) {
@@ -56,5 +61,17 @@ public class JavaFxTicTacToeApplication extends Application {
 
     private int yPos(int i) {
         return i / 3;
+    }
+
+    @Override
+    public void stop() throws Exception {
+        try {
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Game Thread Interrupted.");
+        } finally {
+            executor.shutdownNow();
+        }
     }
 }

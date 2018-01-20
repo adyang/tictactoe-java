@@ -54,15 +54,7 @@ public class GuiGame extends Game {
     }
 
     private Runnable cellHandlerFor(int position) {
-        return () -> {
-            validateAction(position);
-            tryAddMoveToQueue(position);
-        };
-    }
-
-    private void validateAction(int position) {
-        if (board.isMarked(position))
-            throw new IllegalStateException("Cell at position " + position + " already marked.");
+        return () -> tryAddMoveToQueue(position);
     }
 
     private void tryAddMoveToQueue(int position) {
@@ -80,6 +72,11 @@ public class GuiGame extends Game {
 
     @Override
     protected void displayEndStatus() {
+        displayBoardStatus();
+        displayEndStatusMessage();
+    }
+
+    private void displayEndStatusMessage() {
         if (board.hasWinner())
             view.displayWinner(String.valueOf(board.getWinner()));
         else

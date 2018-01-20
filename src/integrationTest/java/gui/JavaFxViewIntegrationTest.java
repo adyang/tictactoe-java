@@ -141,7 +141,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayDraw();
 
         waitForFxEvents();
-        verifyThat("#game-message", hasText("The game is a Draw!"));
+        verifyThat("#game-message", hasText("Draw!"));
     }
 
     private DisplayBoard createBoard(String... cells) {

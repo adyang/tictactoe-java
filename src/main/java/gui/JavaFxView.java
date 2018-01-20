@@ -93,7 +93,7 @@ public class JavaFxView implements View {
     @Override
     public void displayDraw() {
         executeOnUiThread(() -> {
-            gameScene.setGameMessage("The game is a Draw!");
+            gameScene.setGameMessage("Draw!");
         });
     }
 

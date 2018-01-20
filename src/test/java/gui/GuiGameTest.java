@@ -68,20 +68,6 @@ public class GuiGameTest {
     }
 
     @Test
-    public void displayBoardStatus_whenCellActivatedAtMarkedPosition_shouldThrowException() {
-        game.displayBoardStatus();
-        board.mark(0, 'X');
-
-        try {
-            DisplayCell displayCell = mockView.displayBoard.cells.get(0);
-            displayCell.actionHandler.run();
-            fail("Should throw exception on activating cell on marked position.");
-        } catch (IllegalStateException e) {
-            assertEquals("Cell at position 0 already marked.", e.getMessage());
-        }
-    }
-
-    @Test
     public void displayBoardStatus_whenCellActivatedAndMoveIsStillOnQueue_shouldThrowException() {
         game.displayBoardStatus();
 
@@ -121,6 +107,17 @@ public class GuiGameTest {
         game.displayEndStatus();
 
         assertTrue(mockView.displayDrawCalled);
+    }
+
+    @Test
+    public void displayEndStatus_shouldDisplayEndStatusBoard() {
+        markBoardAtPositions('X', 0, 1, 4, 5, 6);
+        markBoardAtPositions('O', 2, 3, 7, 8);
+
+        game.displayEndStatus();
+
+        assertCellsHaveMarker("X", 0, 1, 4, 5, 6);
+        assertCellsHaveMarker("O", 2, 3, 7, 8);
     }
 
     private void assertCellsHaveMarker(String expectedMarker, int... expectedPositions) {
