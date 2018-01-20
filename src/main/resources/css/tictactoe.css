@@ -1,0 +1,47 @@
+.cell {
+    -fx-font-size: 5em;
+    -fx-border-color: grey;
+    -fx-min-width: 7em;
+    -fx-min-height: 7em;
+    -fx-alignment: center;
+}
+
+.left-edge-cell.top-edge-cell {
+    -fx-border-width: 0 1 1 0;
+}
+
+.right-edge-cell.top-edge-cell {
+    -fx-border-width: 0 0 1 1;
+}
+
+.right-edge-cell.bottom-edge-cell {
+    -fx-border-width: 1 0 0 1;
+}
+
+.left-edge-cell.bottom-edge-cell {
+    -fx-border-width: 1 1 0 0;
+}
+
+.top-edge-cell {
+    -fx-border-width: 0 1 1 1;
+}
+
+.right-edge-cell {
+    -fx-border-width: 1 0 1 1;
+}
+
+.bottom-edge-cell {
+    -fx-border-width: 1 1 0 1;
+}
+
+.left-edge-cell {
+    -fx-border-width: 1 1 1 0;
+}
+
+#game-message {
+    -fx-font-size: 2em;
+}
+
+#board {
+    -fx-alignment: center;
+}

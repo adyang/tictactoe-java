@@ -1,6 +1,7 @@
 package gui;
 
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -52,6 +53,14 @@ public class JavaFxView implements View {
         Label cell = new Label(displayCell.marker);
         cell.setId("cell-" + displayCell.idxPos);
         cell.getStyleClass().add("cell");
+        if (displayCell.xPos == 0)
+            cell.getStyleClass().add("left-edge-cell");
+        if (displayCell.yPos == 0)
+            cell.getStyleClass().add("top-edge-cell");
+        if (displayCell.xPos == 2)
+            cell.getStyleClass().add("right-edge-cell");
+        if (displayCell.yPos == 2)
+            cell.getStyleClass().add("bottom-edge-cell");
         return cell;
     }
 
@@ -99,6 +108,7 @@ public class JavaFxView implements View {
             setId("game-scene");
             gameMessage = new Label();
             gameMessage.setId("game-message");
+            setAlignment(gameMessage, Pos.CENTER);
             setTop(gameMessage);
         }
 
