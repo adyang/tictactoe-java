@@ -1,4 +1,4 @@
-package console;
+package application;
 
 import game.Board;
 import game.Player;

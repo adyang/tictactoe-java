@@ -1,7 +1,7 @@
 package players;
 
+import application.PlayerFactory;
 import boards.ThreeByThreeBoard;
-import console.PlayerFactory;
 import game.Player;
 import org.junit.Before;
 import org.junit.Test;

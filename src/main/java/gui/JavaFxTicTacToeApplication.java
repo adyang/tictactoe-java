@@ -8,9 +8,11 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import players.GuiHumanPlayer;
-import players.HumanPlayer;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class JavaFxTicTacToeApplication extends Application {
 
@@ -32,8 +34,6 @@ public class JavaFxTicTacToeApplication extends Application {
         stage.setTitle("Tic-Tac-Toe");
         stage.setScene(scene);
         stage.show();
-
-        executor.shutdown();
     }
 
     private String getClasspathResourceUrl(String resourcePath) {

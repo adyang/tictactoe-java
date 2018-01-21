@@ -1,6 +1,6 @@
 package players;
 
-import console.PlayerFactory;
+import application.PlayerFactory;
 import game.Board;
 import game.Player;
 

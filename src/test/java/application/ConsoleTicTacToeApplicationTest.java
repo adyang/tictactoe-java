@@ -1,5 +1,8 @@
-package console;
+package application;
 
+import application.PlayerFactory;
+import console.ConsoleTicTacToeApplication;
+import console.InputTestUtil;
 import game.Board;
 import game.Player;
 import game.TestPlayer;
@@ -14,7 +17,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
-public class TicTacToeApplicationTest {
+public class ConsoleTicTacToeApplicationTest {
     private static final String[] DEFAULT_INPUTS = {"1", "1", "n"};
     private static final int[] DEFAULT_PLAYER_ONE_MOVES = {0, 1, 2};
     private static final int[] DEFAULT_PLAYER_TWO_MOVES = {3, 4};
@@ -22,7 +25,7 @@ public class TicTacToeApplicationTest {
             new ArrayDeque<>(Arrays.asList(DEFAULT_PLAYER_ONE_MOVES, DEFAULT_PLAYER_TWO_MOVES));
     private ByteArrayInputStream inputStream;
     private ByteArrayOutputStream outputStream;
-    private TicTacToeApplication application;
+    private ConsoleTicTacToeApplication application;
     private MockPlayerFactory mockPlayerFactory;
 
     @Test
@@ -100,6 +103,7 @@ public class TicTacToeApplicationTest {
         playerMovesQueue.add(DEFAULT_PLAYER_TWO_MOVES);
         runWithInput(new String[]{"1", "1", "y", "1", "1", "y", "1", "1", "n"}, playerMovesQueue);
 
+        assertEquals(3, countOf("===== Welcome to Tic-Tac-Toe =====", contentsOf(outputStream)));
         assertEquals(3, countOf("X has Won!", contentsOf(outputStream)));
         assertEquals(3, countOf("Would you like to play again (y/n)? ", contentsOf(outputStream)));
     }
@@ -115,7 +119,7 @@ public class TicTacToeApplicationTest {
         outputStream = new ByteArrayOutputStream();
         mockPlayerFactory = new MockPlayerFactory();
         mockPlayerFactory.playerMovesQueue.addAll(playerMovesQueue);
-        application = new TicTacToeApplication(inputStream, new PrintStream(outputStream), mockPlayerFactory);
+        application = new ConsoleTicTacToeApplication(inputStream, new PrintStream(outputStream), mockPlayerFactory);
         application.run();
     }
 
