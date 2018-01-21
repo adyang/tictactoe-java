@@ -1,5 +1,7 @@
 package gui;
 
+import application.PlayerNumber;
+
 public interface View {
     void displayBoard(DisplayBoard displayBoard);
 
@@ -8,4 +10,12 @@ public interface View {
     void displayWinner(String winner);
 
     void displayDraw();
+
+    void displayWelcome();
+
+    void displayGameConfig(DisplayGameConfig displayGameConfig);
+
+    boolean validateGameConfig();
+
+    String getPlayerTypeFor(PlayerNumber playerNumber);
 }

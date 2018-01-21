@@ -1,6 +1,7 @@
 package console;
 
 import application.PlayerFactory;
+import application.PlayerNumber;
 import application.TicTacToeApplication;
 import boards.ThreeByThreeBoard;
 import game.Board;

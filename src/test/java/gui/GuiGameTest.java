@@ -132,31 +132,4 @@ public class GuiGameTest {
         for (int pos : positions)
             board.mark(pos, marker);
     }
-
-    private class MockView implements View {
-        DisplayBoard displayBoard;
-        String displayedMarker;
-        String displayedWinner;
-        boolean displayDrawCalled;
-
-        @Override
-        public void displayBoard(DisplayBoard displayBoard) {
-            this.displayBoard = displayBoard;
-        }
-
-        @Override
-        public void displayCurrentMarker(String marker) {
-            this.displayedMarker = marker;
-        }
-
-        @Override
-        public void displayWinner(String winner) {
-            this.displayedWinner = winner;
-        }
-
-        @Override
-        public void displayDraw() {
-            this.displayDrawCalled = true;
-        }
-    }
 }

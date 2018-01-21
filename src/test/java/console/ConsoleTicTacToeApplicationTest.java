@@ -1,9 +1,6 @@
 package console;
 
-import application.PlayerFactory;
-import game.Board;
-import game.Player;
-import game.TestPlayer;
+import application.MockPlayerFactory;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -141,26 +138,5 @@ public class ConsoleTicTacToeApplicationTest {
         assertEquals(2, mockPlayerFactory.playerTypesCreated.size());
         assertEquals(playerOneType, mockPlayerFactory.playerTypesCreated.get(0));
         assertEquals(playerTwoType, mockPlayerFactory.playerTypesCreated.get(1));
-    }
-
-    private class MockPlayerFactory implements PlayerFactory {
-        Queue<int[]> playerMovesQueue = new ArrayDeque<>();
-        List<String> playerTypesCreated = new ArrayList<>();
-        List<Character> playerMarkers = new ArrayList<>();
-        List<Character> opponentMarkers = new ArrayList<>();
-
-        @Override
-        public Player createPlayer(String type, char marker, Board board, char opponentMarker) {
-            this.playerTypesCreated.add(type);
-            this.playerMarkers.add(marker);
-            this.opponentMarkers.add(opponentMarker);
-            return createTestPlayerWithNextMoves(marker, board);
-        }
-
-        private Player createTestPlayerWithNextMoves(char marker, Board board) {
-            TestPlayer player = new TestPlayer(marker, board);
-            player.enqueueMoves(this.playerMovesQueue.remove());
-            return player;
-        }
     }
 }

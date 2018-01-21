@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class JavaFxTicTacToeApplication extends Application {
+public class JavaFxMain extends Application {
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 

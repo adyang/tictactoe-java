@@ -1,5 +1,6 @@
 package gui;
 
+import application.PlayerNumber;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -95,6 +96,26 @@ public class JavaFxView implements View {
         executeOnUiThread(() -> {
             gameScene.setGameMessage("Draw!");
         });
+    }
+
+    @Override
+    public void displayWelcome() {
+
+    }
+
+    @Override
+    public void displayGameConfig(DisplayGameConfig displayGameConfig) {
+
+    }
+
+    @Override
+    public boolean validateGameConfig() {
+        return false;
+    }
+
+    @Override
+    public String getPlayerTypeFor(PlayerNumber playerNumber) {
+        return null;
     }
 
     private void executeOnUiThread(Runnable runnable) {
