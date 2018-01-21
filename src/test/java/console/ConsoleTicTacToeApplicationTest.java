@@ -1,14 +1,15 @@
-package application;
+package console;
 
 import application.PlayerFactory;
-import console.ConsoleTicTacToeApplication;
-import console.InputTestUtil;
 import game.Board;
 import game.Player;
 import game.TestPlayer;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
