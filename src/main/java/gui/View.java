@@ -18,4 +18,6 @@ public interface View {
     boolean validateGameConfig();
 
     String getPlayerTypeFor(PlayerNumber playerNumber);
+
+    void displayPlayAgain(Runnable playAgainHandler);
 }

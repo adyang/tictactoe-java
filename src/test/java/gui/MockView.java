@@ -12,6 +12,7 @@ class MockView implements View {
     String playerOneSelectedType;
     String playerTwoSelectedType;
     boolean isValidGameConfig;
+    Runnable bindedPlayAgainHandler;
 
     @Override
     public void displayBoard(DisplayBoard displayBoard) {
@@ -57,5 +58,10 @@ class MockView implements View {
                 return playerTwoSelectedType;
         }
         throw new IllegalArgumentException("Unhandled PlayerNumber: " + playerNumber);
+    }
+
+    @Override
+    public void displayPlayAgain(Runnable playAgainHandler) {
+        this.bindedPlayAgainHandler = playAgainHandler;
     }
 }

@@ -15,11 +15,15 @@ public class GuiTicTacToeApplication extends TicTacToeApplication {
     private static final String HUMAN = "Human";
     private static final String COMPUTER = "Computer";
     private final BlockingQueue<String> playerTypeQueue;
+    private final BlockingQueue<Boolean> playAgainQueue;
+    private final BlockingQueue<Integer> moveQueue;
     private final View view;
 
-    public GuiTicTacToeApplication(BlockingQueue<String> playerTypeQueue, View view, PlayerFactory playerFactory) {
+    public GuiTicTacToeApplication(BlockingQueue<String> playerTypeQueue, BlockingQueue<Boolean> playAgainQueue, BlockingQueue<Integer> moveQueue, View view, PlayerFactory playerFactory) {
         super(playerFactory);
         this.playerTypeQueue = playerTypeQueue;
+        this.playAgainQueue = playAgainQueue;
+        this.moveQueue = moveQueue;
         this.view = view;
     }
 
@@ -79,11 +83,24 @@ public class GuiTicTacToeApplication extends TicTacToeApplication {
 
     @Override
     protected Game createGame(Board board, Player playerOne, Player playerTwo) {
-        return null;
+        return new GuiGame(board, playerOne, playerTwo, view, moveQueue);
     }
 
     @Override
     protected boolean playAgain() {
-        return false;
+        view.displayPlayAgain(playAgainHandler());
+        return tryWaitForPlayAgainResponse();
+    }
+
+    private Runnable playAgainHandler() {
+        return () -> playAgainQueue.add(true);
+    }
+
+    private boolean tryWaitForPlayAgainResponse() {
+        try {
+            return playAgainQueue.take();
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Interrupted while waiting for play again selection.", e);
+        }
     }
 }

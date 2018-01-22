@@ -118,6 +118,11 @@ public class JavaFxView implements View {
         return null;
     }
 
+    @Override
+    public void displayPlayAgain(Runnable playAgainHandler) {
+
+    }
+
     private void executeOnUiThread(Runnable runnable) {
         Platform.runLater(runnable);
     }

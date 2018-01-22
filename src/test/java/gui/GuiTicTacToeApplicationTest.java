@@ -15,17 +15,19 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class GuiTicTacToeApplicationTest {
-    private MockView mockView;
     private GuiTicTacToeApplication application;
     private BlockingQueue<String> playerTypeQueue;
+    private BlockingQueue<Boolean> playAgainQueue;
+    private MockView mockView;
     private MockPlayerFactory mockPlayerFactory;
 
     @Before
     public void setUp() throws Exception {
         playerTypeQueue = new ArrayBlockingQueue<>(PlayerNumber.values().length);
+        playAgainQueue = new ArrayBlockingQueue<>(1);
         mockView = new MockView();
         mockPlayerFactory = new MockPlayerFactory();
-        application = new GuiTicTacToeApplication(playerTypeQueue, mockView, mockPlayerFactory);
+        application = new GuiTicTacToeApplication(playerTypeQueue, playAgainQueue, null, mockView, mockPlayerFactory);
     }
 
     @Test
@@ -95,5 +97,15 @@ public class GuiTicTacToeApplicationTest {
         assertEquals(PlayerNumber.TWO.marker, mockPlayerFactory.playerMarkers.get(1).charValue());
         assertEquals(PlayerNumber.ONE.opponentMarker, mockPlayerFactory.opponentMarkers.get(0).charValue());
         assertEquals(PlayerNumber.TWO.opponentMarker, mockPlayerFactory.opponentMarkers.get(1).charValue());
+    }
+
+    @Test
+    public void displayPlayAgain_whenRunPlayAgainHandler_shouldAddToPlayAgainQueue() throws InterruptedException {
+        playAgainQueue.add(false);
+        application.playAgain();
+
+        mockView.bindedPlayAgainHandler.run();
+
+        assertTrue(playAgainQueue.take());
     }
 }
