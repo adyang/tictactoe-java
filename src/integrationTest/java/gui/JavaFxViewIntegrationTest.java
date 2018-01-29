@@ -1,8 +1,10 @@
 package gui;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.junit.Test;
@@ -11,6 +13,8 @@ import org.testfx.framework.junit.ApplicationTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,6 +26,7 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 public class JavaFxViewIntegrationTest extends ApplicationTest {
     private static final int BOARD_SIZE = 3;
+    public static final List<String> DISPLAY_PLAYER_TYPES = Arrays.asList("Human", "Computer");
     private View view;
     private Scene scene;
     private Group dummyGroup;
@@ -144,6 +149,76 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         verifyThat("#game-message", hasText("Draw!"));
     }
 
+    @Test
+    public void displayWelcome_shouldSwitchSceneRootToWelcome() {
+        view.displayWelcome();
+
+        waitForFxEvents();
+        assertNotSame(dummyGroup, scene.getRoot());
+        assertTrue(lookup("#welcome-scene").tryQuery().isPresent());
+    }
+
+    @Test
+    public void displayWelcome_shouldDisplayWelcomeMessage() {
+        view.displayWelcome();
+
+        waitForFxEvents();
+        verifyThat("#welcome-message", hasText("Tic-Tac-Toe"));
+    }
+
+    @Test
+    public void displayGameConfig_shouldDisplayPlayerOneConfig() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+
+        waitForFxEvents();
+        verifyThat("#player-one .config-name", hasText("Player One"));
+        assertOptionsHasText("#player-one .config-option", DISPLAY_PLAYER_TYPES);
+    }
+
+    @Test
+    public void displayGameConfig_shouldDisplayPlayerTwoConfig() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+
+        waitForFxEvents();
+        verifyThat("#player-two .config-name", hasText("Player Two"));
+        assertOptionsHasText("#player-two .config-option", DISPLAY_PLAYER_TYPES);
+    }
+
+    @Test
+    public void displayGameConfig_shouldDisplayPlayButton() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+
+        waitForFxEvents();
+        verifyThat("#play", hasText("Play"));
+    }
+
+    @Test
+    public void displayGameConfig_clickPlayButton_shouldRunPlayHandler() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+        AtomicBoolean hasHandlerRun = new AtomicBoolean();
+        gameConfig.playHandler = () -> hasHandlerRun.set(true);
+
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+
+        waitForFxEvents();
+        clickOn("#play");
+        assertTrue(hasHandlerRun.get());
+    }
+
     private DisplayBoard createBoard(String... cells) {
         DisplayBoard board = new DisplayBoard();
         for (int i = 0; i < cells.length; i++)
@@ -191,5 +266,11 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
 
     private List<Integer> listOfIntegersInRange(int startInclusive, int endExclusive) {
         return IntStream.range(startInclusive, endExclusive).boxed().collect(Collectors.toList());
+    }
+
+    private void assertOptionsHasText(String lookupQuery, List<String> expectedOptions) {
+        Set<Node> nodes = lookup(lookupQuery).queryAll();
+        for (Node node : nodes)
+            expectedOptions.contains(((RadioButton) node).getText());
     }
 }
