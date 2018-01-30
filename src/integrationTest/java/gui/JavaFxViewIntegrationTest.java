@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,6 +24,7 @@ import static gui.DisplayBoard.DisplayCell;
 import static org.junit.Assert.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.hasText;
+import static org.testfx.matcher.base.NodeMatchers.isInvisible;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 public class JavaFxViewIntegrationTest extends ApplicationTest {
@@ -208,15 +211,122 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
     public void displayGameConfig_clickPlayButton_shouldRunPlayHandler() {
         DisplayGameConfig gameConfig = new DisplayGameConfig();
         gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
-        AtomicBoolean hasHandlerRun = new AtomicBoolean();
-        gameConfig.playHandler = () -> hasHandlerRun.set(true);
+        AtomicBoolean hasHandlerRan = new AtomicBoolean();
+        gameConfig.playHandler = () -> hasHandlerRan.set(true);
 
         view.displayWelcome();
         view.displayGameConfig(gameConfig);
 
         waitForFxEvents();
         clickOn("#play");
-        assertTrue(hasHandlerRun.get());
+        assertTrue(hasHandlerRan.get());
+    }
+
+    @Test
+    public void displayPlayAgain_shouldDisplayPlayAgainButton() {
+        DisplayBoard board = new DisplayBoard();
+
+        view.displayBoard(board);
+        view.displayPlayAgain(null);
+
+        waitForFxEvents();
+        verifyThat("#play-again", hasText("Play Again?"));
+    }
+
+    @Test
+    public void displayPlayAgain_clickPlayAgainButton_shouldRunPlayHandler() {
+        DisplayBoard board = new DisplayBoard();
+        AtomicBoolean hasHandlerRan = new AtomicBoolean();
+
+        view.displayBoard(board);
+        view.displayPlayAgain(() -> hasHandlerRan.set(true));
+
+        waitForFxEvents();
+        clickOn("#play-again");
+        assertTrue(hasHandlerRan.get());
+    }
+
+    @Test
+    public void validateGameConfig_whenPlayerTypeNotSelected_shouldReturnFalse() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+        AtomicBoolean isValidGameConfig = new AtomicBoolean(true);
+
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+        Platform.runLater(() -> isValidGameConfig.set(view.validateGameConfig()));
+
+        waitForFxEvents();
+        assertFalse(isValidGameConfig.get());
+    }
+
+    @Test
+    public void validateGameConfig_whenPlayerOneTypeNotSelected_shouldDisplayErrorMessage() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+        Platform.runLater(() -> view.validateGameConfig());
+
+        waitForFxEvents();
+        verifyThat("#player-one .error-message", hasText("Please select player type for Player One."));
+    }
+
+    @Test
+    public void validateGameConfig_whenPlayerTwoTypeNotSelected_shouldDisplayErrorMessage() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+        Platform.runLater(() -> view.validateGameConfig());
+
+        waitForFxEvents();
+        verifyThat("#player-two .error-message", hasText("Please select player type for Player Two."));
+    }
+
+    @Test
+    public void validateGameConfig_whenAllConfigSelected_shouldReturnTrue() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+        AtomicBoolean isValidGameConfig = new AtomicBoolean();
+
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+        waitForFxEvents();
+        Node playerOneOption = lookup("#player-one .config-option").match(optionWithText("Human")).query();
+        clickOn(playerOneOption);
+        Node playerTwoOption = lookup("#player-two .config-option").match(optionWithText("Human")).query();
+        clickOn(playerTwoOption);
+        Platform.runLater(() -> isValidGameConfig.set(view.validateGameConfig()));
+
+        waitForFxEvents();
+        assertTrue(isValidGameConfig.get());
+    }
+
+    @Test
+    public void validateGameConfig_whenAllConfigSelected_shouldNotDisplayErrorMessage() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+        Platform.runLater(() -> view.validateGameConfig());
+        waitForFxEvents();
+        Node playerOneOption = lookup("#player-one .config-option").match(optionWithText("Human")).query();
+        clickOn(playerOneOption);
+        Node playerTwoOption = lookup("#player-two .config-option").match(optionWithText("Human")).query();
+        clickOn(playerTwoOption);
+        Platform.runLater(() -> view.validateGameConfig());
+
+        waitForFxEvents();
+        verifyThat("#player-one .error-message", isInvisible());
+        verifyThat("#player-two .error-message", isInvisible());
+    }
+
+    private Predicate<RadioButton> optionWithText(String targetText) {
+        return (RadioButton rb) -> rb.getText().equals(targetText);
     }
 
     private DisplayBoard createBoard(String... cells) {

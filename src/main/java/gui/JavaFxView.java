@@ -14,16 +14,17 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static gui.DisplayBoard.DisplayCell;
 
 public class JavaFxView implements View {
+    public static final String PLAYER_ONE_DISPLAY_NAME = "Player One";
+    public static final String PLAYER_TWO_DISPLAY_NAME = "Player Two";
     private final Scene scene;
     private final GameScene gameScene;
     private final WelcomeScene welcomeScene;
+    private Map<PlayerNumber, GameConfigSection> gameConfigSectionMap;
 
     public JavaFxView(Scene scene) {
         this.scene = scene;
@@ -125,20 +126,21 @@ public class JavaFxView implements View {
     }
 
     private void displayMainGameConfig(DisplayGameConfig displayGameConfig) {
-        List<GameConfigSection> gameConfigSections = createGameConfigSections(displayGameConfig);
-        VBox gameConfigContainer = createGameConfigContainer(gameConfigSections);
+        gameConfigSectionMap = createGameConfigSectionMap(displayGameConfig);
+        VBox gameConfigContainer = createGameConfigContainer(gameConfigSectionMap.values());
         welcomeScene.setGameConfig(gameConfigContainer);
     }
 
-    private List<GameConfigSection> createGameConfigSections(DisplayGameConfig displayGameConfig) {
-        GameConfigSection playerOneConfig =
-                new GameConfigSection("player-one", "Player One", displayGameConfig.playerTypes);
-        GameConfigSection playerTwoConfig =
-                new GameConfigSection("player-two", "Player Two", displayGameConfig.playerTypes);
-        return Arrays.asList(playerOneConfig, playerTwoConfig);
+    private Map<PlayerNumber, GameConfigSection> createGameConfigSectionMap(DisplayGameConfig displayGameConfig) {
+        SortedMap<PlayerNumber, GameConfigSection> map = new TreeMap<>();
+        map.put(PlayerNumber.ONE,
+                new GameConfigSection("player-one", PLAYER_ONE_DISPLAY_NAME, displayGameConfig.playerTypes));
+        map.put(PlayerNumber.TWO,
+                new GameConfigSection("player-two", PLAYER_TWO_DISPLAY_NAME, displayGameConfig.playerTypes));
+        return map;
     }
 
-    private VBox createGameConfigContainer(List<GameConfigSection> gameConfigSections) {
+    private VBox createGameConfigContainer(Collection<GameConfigSection> gameConfigSections) {
         VBox gameConfigContainer = new VBox();
         gameConfigContainer.getChildren().addAll(gameConfigSections);
         return gameConfigContainer;
@@ -153,7 +155,24 @@ public class JavaFxView implements View {
 
     @Override
     public boolean validateGameConfig() {
-        return false;
+        clearErrorMessages();
+        boolean isValidPlayerOne = validatePlayerConfig(gameConfigSectionMap.get(PlayerNumber.ONE), PLAYER_ONE_DISPLAY_NAME);
+        boolean isValidPlayerTwo = validatePlayerConfig(gameConfigSectionMap.get(PlayerNumber.TWO), PLAYER_TWO_DISPLAY_NAME);
+        return isValidPlayerOne && isValidPlayerTwo;
+    }
+
+    private void clearErrorMessages() {
+        for (GameConfigSection gameConfigSection : gameConfigSectionMap.values()) {
+            gameConfigSection.clearErrorMessage();
+        }
+    }
+
+    private boolean validatePlayerConfig(GameConfigSection playerConfig, String playerDisplayName) {
+        if (playerConfig.hasNoSelection()) {
+            playerConfig.displayErrorMessage(String.format("Please select player type for %s.", playerDisplayName));
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -163,7 +182,12 @@ public class JavaFxView implements View {
 
     @Override
     public void displayPlayAgain(Runnable playAgainHandler) {
-
+        executeOnUiThread(() -> {
+            Button playAgainButton = new Button("Play Again?");
+            playAgainButton.setId("play-again");
+            playAgainButton.setOnAction(event -> playAgainHandler.run());
+            gameScene.setPlayAgainButton(playAgainButton);
+        });
     }
 
     private void executeOnUiThread(Runnable runnable) {
@@ -187,6 +211,10 @@ public class JavaFxView implements View {
 
         void setBoard(Node node) {
             setCenter(node);
+        }
+
+        void setPlayAgainButton(Node node) {
+            setBottom(node);
         }
     }
 
@@ -215,6 +243,7 @@ public class JavaFxView implements View {
 
     private static class GameConfigSection extends VBox {
         private final ToggleGroup optionGroup;
+        private final Label errorMessage;
 
         public GameConfigSection(String id, String configDisplayName, List<String> configOptions) {
             setId(id);
@@ -222,7 +251,8 @@ public class JavaFxView implements View {
             optionGroup = new ToggleGroup();
             List<RadioButton> optionButtons = createOptionButtons(configOptions, optionGroup);
             HBox optionsContainer = createOptionsContainerWith(optionButtons);
-            getChildren().addAll(configName, optionsContainer);
+            errorMessage = createErrorMessage();
+            getChildren().addAll(configName, optionsContainer, errorMessage);
         }
 
         private Label createConfigName(String configDisplayName) {
@@ -246,6 +276,26 @@ public class JavaFxView implements View {
             HBox optionsContainer = new HBox();
             optionsContainer.getChildren().addAll(optionButtons);
             return optionsContainer;
+        }
+
+        private Label createErrorMessage() {
+            Label errorMessage = new Label();
+            errorMessage.getStyleClass().add("error-message");
+            errorMessage.setVisible(false);
+            return errorMessage;
+        }
+
+        public boolean hasNoSelection() {
+            return optionGroup.getSelectedToggle() == null;
+        }
+
+        public void displayErrorMessage(String message) {
+            errorMessage.setText(message);
+            errorMessage.setVisible(true);
+        }
+
+        public void clearErrorMessage() {
+            errorMessage.setVisible(false);
         }
     }
 }
