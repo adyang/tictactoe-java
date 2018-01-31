@@ -252,6 +252,18 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
     }
 
     @Test
+    public void displayPlayAgain_clickPlayAgainButton_shouldHidePlayAgainButton() {
+        DisplayBoard board = new DisplayBoard();
+        view.displayBoard(board);
+        view.displayPlayAgain(null);
+
+        view.hidePlayAgain();
+
+        waitForFxEvents();
+        verifyThat("#play-again-container", isInvisible());
+    }
+
+    @Test
     public void validateGameConfig_whenPlayerTypeNotSelected_shouldReturnFalse() {
         DisplayGameConfig gameConfig = new DisplayGameConfig();
         gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;

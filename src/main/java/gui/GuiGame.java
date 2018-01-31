@@ -19,6 +19,7 @@ public class GuiGame extends Game {
 
     @Override
     protected void displayBoardStatus() {
+        moveQueue.clear();
         DisplayBoard displayBoard = toDisplayBoard(board);
         view.displayBoard(displayBoard);
     }

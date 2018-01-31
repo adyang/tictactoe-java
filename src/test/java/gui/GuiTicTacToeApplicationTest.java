@@ -106,4 +106,13 @@ public class GuiTicTacToeApplicationTest {
 
         assertTrue(playAgainQueue.take());
     }
+
+    @Test
+    public void displayPlayAgain_whenPlayAgainResponseReceived_shouldHidePlayAgainView() throws InterruptedException {
+        playAgainQueue.add(true);
+
+        application.playAgain();
+
+        assertTrue(mockView.hidePlayAgainCalled);
+    }
 }

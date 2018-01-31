@@ -20,4 +20,6 @@ public interface View {
     String getPlayerTypeFor(PlayerNumber playerNumber);
 
     void displayPlayAgain(Runnable playAgainHandler);
+
+    void hidePlayAgain();
 }

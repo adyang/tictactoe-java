@@ -13,6 +13,7 @@ class MockView implements View {
     String playerTwoSelectedType;
     boolean isValidGameConfig;
     Runnable bindedPlayAgainHandler;
+    boolean hidePlayAgainCalled;
 
     @Override
     public void displayBoard(DisplayBoard displayBoard) {
@@ -63,5 +64,10 @@ class MockView implements View {
     @Override
     public void displayPlayAgain(Runnable playAgainHandler) {
         this.bindedPlayAgainHandler = playAgainHandler;
+    }
+
+    @Override
+    public void hidePlayAgain() {
+        this.hidePlayAgainCalled = true;
     }
 }

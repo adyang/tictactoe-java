@@ -38,10 +38,66 @@
     -fx-border-width: 1 1 1 0;
 }
 
+#game-scene {
+    -fx-padding: 1em 0 1em 0;
+}
+
 #game-message {
     -fx-font-size: 2em;
 }
 
 #board {
     -fx-alignment: center;
+}
+
+#play-again-container {
+    -fx-spacing: 0;
+    -fx-padding: 0 0 1em 0;
+    -fx-alignment: center;
+    -fx-font-size: 1.3em;
+}
+
+#welcome-message {
+    -fx-font-size: 3em;
+}
+
+#welcome-scene {
+    -fx-padding: 1em 0 1em 0;
+}
+
+#game-config {
+    -fx-alignment: center;
+    -fx-spacing: 1em;
+}
+
+.config-name {
+    -fx-max-width: infinity;
+    -fx-alignment: center;
+    -fx-border-insets: 2em 0 2em 0;
+    -fx-background-insets: 2em 0 2em 0;
+    -fx-font-size: 1.8em;
+    -fx-border-width: 1 0 1 0;
+    -fx-border-color: grey;
+}
+
+.config-options-container {
+    -fx-alignment: center;
+}
+
+.config-option {
+    -fx-padding: 0 1.5em 0 1.5em;
+    -fx-font-size: 1.2em;
+}
+
+.error-message {
+    -fx-alignment: center;
+    -fx-max-width: infinity;
+    -fx-padding: 1.5em 0 0 0;
+    -fx-text-fill: red;
+}
+
+#play-container {
+    -fx-padding: 2em;
+    -fx-alignment: center;
+    -fx-font-size: 1.5em;
 }

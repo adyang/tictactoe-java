@@ -78,7 +78,9 @@ public class GuiTicTacToeApplication extends TicTacToeApplication {
             String selectedPlayerType = playerTypeQueue.take();
             return playerFactory.createPlayer(selectedPlayerType, playerNumber.marker, board, playerNumber.opponentMarker);
         } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while waiting for player type selection.", e);
+            System.out.println("Interrupted while waiting for player type selection. Game Exiting...");
+            System.exit(0);
+            return null;
         }
     }
 
@@ -90,7 +92,9 @@ public class GuiTicTacToeApplication extends TicTacToeApplication {
     @Override
     protected boolean playAgain() {
         view.displayPlayAgain(playAgainHandler());
-        return tryWaitForPlayAgainResponse();
+        boolean playAgainResponse = tryWaitForPlayAgainResponse();
+        view.hidePlayAgain();
+        return playAgainResponse;
     }
 
     private Runnable playAgainHandler() {
@@ -101,7 +105,9 @@ public class GuiTicTacToeApplication extends TicTacToeApplication {
         try {
             return playAgainQueue.take();
         } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while waiting for play again selection.", e);
+            System.out.println("Interrupted while waiting for play again selection. Game Exiting...");
+            System.exit(0);
+            return false;
         }
     }
 }

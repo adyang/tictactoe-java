@@ -142,15 +142,23 @@ public class JavaFxView implements View {
 
     private VBox createGameConfigContainer(Collection<GameConfigSection> gameConfigSections) {
         VBox gameConfigContainer = new VBox();
+        gameConfigContainer.setId("game-config");
         gameConfigContainer.getChildren().addAll(gameConfigSections);
         return gameConfigContainer;
     }
 
     private void displayPlayButton(Runnable playHandler) {
+        Button playButton = createPlayButton(playHandler);
+        VBox playButtonContainer = new VBox(playButton);
+        playButtonContainer.setId("play-container");
+        welcomeScene.setPlayButton(playButtonContainer);
+    }
+
+    private Button createPlayButton(Runnable playHandler) {
         Button playButton = new Button("Play");
         playButton.setId("play");
         playButton.setOnAction(event -> playHandler.run());
-        welcomeScene.setPlayButton(playButton);
+        return playButton;
     }
 
     @Override
@@ -183,10 +191,24 @@ public class JavaFxView implements View {
     @Override
     public void displayPlayAgain(Runnable playAgainHandler) {
         executeOnUiThread(() -> {
-            Button playAgainButton = new Button("Play Again?");
-            playAgainButton.setId("play-again");
-            playAgainButton.setOnAction(event -> playAgainHandler.run());
-            gameScene.setPlayAgainButton(playAgainButton);
+            Button playAgainButton = createPlayAgainButton(playAgainHandler);
+            VBox playAgainContainer = new VBox(playAgainButton);
+            playAgainContainer.setId("play-again-container");
+            gameScene.setPlayAgainButton(playAgainContainer);
+        });
+    }
+
+    private Button createPlayAgainButton(Runnable playAgainHandler) {
+        Button playAgainButton = new Button("Play Again?");
+        playAgainButton.setId("play-again");
+        playAgainButton.setOnAction(event -> playAgainHandler.run());
+        return playAgainButton;
+    }
+
+    @Override
+    public void hidePlayAgain() {
+        executeOnUiThread(() -> {
+            gameScene.hidePlayAgainButton();
         });
     }
 
@@ -215,6 +237,11 @@ public class JavaFxView implements View {
 
         void setPlayAgainButton(Node node) {
             setBottom(node);
+            setAlignment(node, Pos.CENTER);
+        }
+
+        public void hidePlayAgainButton() {
+            getBottom().setVisible(false);
         }
     }
 
@@ -238,6 +265,7 @@ public class JavaFxView implements View {
 
         void setPlayButton(Node node) {
             setBottom(node);
+            setAlignment(node, Pos.CENTER);
         }
     }
 
@@ -274,6 +302,7 @@ public class JavaFxView implements View {
 
         private HBox createOptionsContainerWith(List<RadioButton> optionButtons) {
             HBox optionsContainer = new HBox();
+            optionsContainer.getStyleClass().add("config-options-container");
             optionsContainer.getChildren().addAll(optionButtons);
             return optionsContainer;
         }
