@@ -1,5 +1,6 @@
 package gui;
 
+import application.PlayerNumber;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -29,7 +31,10 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 public class JavaFxViewIntegrationTest extends ApplicationTest {
     private static final int BOARD_SIZE = 3;
-    public static final List<String> DISPLAY_PLAYER_TYPES = Arrays.asList("Human", "Computer");
+    private static final String DISPLAY_OPTION_HUMAN = "Human";
+    private static final String DISPLAY_OPTION_COMPUTER = "Computer";
+    private static final List<String> DISPLAY_PLAYER_TYPES = Arrays.asList(DISPLAY_OPTION_HUMAN, DISPLAY_OPTION_COMPUTER);
+
     private View view;
     private Scene scene;
     private Group dummyGroup;
@@ -291,14 +296,12 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         DisplayGameConfig gameConfig = new DisplayGameConfig();
         gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
         AtomicBoolean isValidGameConfig = new AtomicBoolean();
-
         view.displayWelcome();
         view.displayGameConfig(gameConfig);
         waitForFxEvents();
-        Node playerOneOption = lookup("#player-one .config-option").match(optionWithText("Human")).query();
-        clickOn(playerOneOption);
-        Node playerTwoOption = lookup("#player-two .config-option").match(optionWithText("Human")).query();
-        clickOn(playerTwoOption);
+
+        clickOnOption("#player-one .config-option", DISPLAY_OPTION_HUMAN);
+        clickOnOption("#player-two .config-option", DISPLAY_OPTION_HUMAN);
         Platform.runLater(() -> isValidGameConfig.set(view.validateGameConfig()));
 
         waitForFxEvents();
@@ -309,20 +312,55 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
     public void validateGameConfig_whenAllConfigSelected_shouldNotDisplayErrorMessage() {
         DisplayGameConfig gameConfig = new DisplayGameConfig();
         gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
-
         view.displayWelcome();
         view.displayGameConfig(gameConfig);
         Platform.runLater(() -> view.validateGameConfig());
         waitForFxEvents();
-        Node playerOneOption = lookup("#player-one .config-option").match(optionWithText("Human")).query();
-        clickOn(playerOneOption);
-        Node playerTwoOption = lookup("#player-two .config-option").match(optionWithText("Human")).query();
-        clickOn(playerTwoOption);
+
+        clickOnOption("#player-one .config-option", DISPLAY_OPTION_HUMAN);
+        clickOnOption("#player-two .config-option", DISPLAY_OPTION_HUMAN);
         Platform.runLater(() -> view.validateGameConfig());
 
         waitForFxEvents();
         verifyThat("#player-one .error-message", isInvisible());
         verifyThat("#player-two .error-message", isInvisible());
+    }
+
+    @Test
+    public void getPlayerTypeFor_playerOne_shouldReturnChosenPlayerType() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+        waitForFxEvents();
+
+        clickOnOption("#player-one .config-option", DISPLAY_OPTION_HUMAN);
+        AtomicReference<String> playerType = new AtomicReference<>();
+        Platform.runLater(() -> playerType.set(view.getPlayerTypeFor(PlayerNumber.ONE)));
+
+        waitForFxEvents();
+        assertEquals(DISPLAY_OPTION_HUMAN, playerType.get());
+    }
+
+    @Test
+    public void getPlayerTypeFor_playerTwo_shouldReturnChosenPlayerType() {
+        DisplayGameConfig gameConfig = new DisplayGameConfig();
+        gameConfig.playerTypes = DISPLAY_PLAYER_TYPES;
+        view.displayWelcome();
+        view.displayGameConfig(gameConfig);
+        waitForFxEvents();
+
+        clickOnOption("#player-two .config-option", DISPLAY_OPTION_COMPUTER);
+        AtomicReference<String> playerType = new AtomicReference<>();
+        Platform.runLater(() -> playerType.set(view.getPlayerTypeFor(PlayerNumber.TWO)));
+
+        waitForFxEvents();
+        assertEquals(DISPLAY_OPTION_COMPUTER, playerType.get());
+    }
+
+    private void clickOnOption(String lookupQuery, String targetOption) {
+        Node playerOneOption = lookup(lookupQuery).match(optionWithText(targetOption)).query();
+        clickOn(playerOneOption);
     }
 
     private Predicate<RadioButton> optionWithText(String targetText) {

@@ -177,7 +177,7 @@ public class JavaFxView implements View {
 
     @Override
     public String getPlayerTypeFor(PlayerNumber playerNumber) {
-        return null;
+        return gameConfigSectionMap.get(playerNumber).getSelection();
     }
 
     @Override
@@ -296,6 +296,11 @@ public class JavaFxView implements View {
 
         public void clearErrorMessage() {
             errorMessage.setVisible(false);
+        }
+
+        public String getSelection() {
+            RadioButton selectedButton = (RadioButton) optionGroup.getSelectedToggle();
+            return selectedButton.getText();
         }
     }
 }
