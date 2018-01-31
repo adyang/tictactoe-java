@@ -83,7 +83,7 @@ public class ConsoleTicTacToeApplication extends TicTacToeApplication {
 
     private String toTypeString(int selectedType) {
         if (selectedType == 1)
-            return "human";
+            return "consoleHuman";
         else if (selectedType == 2)
             return "computer";
         else

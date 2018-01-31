@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-public class HumanPlayer implements Player {
+public class ConsoleHumanPlayer implements Player {
 	private static final int UI_OFFSET = 1;
 
 	private char marker;
@@ -15,7 +15,7 @@ public class HumanPlayer implements Player {
 	private Scanner scanner;
 	private PrintStream printStream;
 
-	public HumanPlayer(char marker, Board board, InputStream inputStream, PrintStream printStream) {
+	public ConsoleHumanPlayer(char marker, Board board, InputStream inputStream, PrintStream printStream) {
 		this.marker = marker;
 		this.board = board;
 		this.scanner = new Scanner(inputStream);

@@ -47,13 +47,13 @@ public class ConsoleTicTacToeApplicationTest {
     @Test
     public void shouldCreateCorrectTypes_playerOneHuman_playerTwoComputer() throws Exception {
         runWithInput(new String[]{"1", "2", "n"}, DEFAULT_MOVES_QUEUE);
-        assertPlayerTypes("human", "computer");
+        assertPlayerTypes("consoleHuman", "computer");
     }
 
     @Test
     public void shouldCreateCorrectTypes_playerOneComputer_playerTwoHuman() throws Exception {
         runWithInput(new String[]{"2", "1", "n"}, DEFAULT_MOVES_QUEUE);
-        assertPlayerTypes("computer", "human");
+        assertPlayerTypes("computer", "consoleHuman");
     }
 
     @Test

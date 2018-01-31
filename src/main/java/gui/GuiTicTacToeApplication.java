@@ -19,7 +19,8 @@ public class GuiTicTacToeApplication extends TicTacToeApplication {
     private final BlockingQueue<Integer> moveQueue;
     private final View view;
 
-    public GuiTicTacToeApplication(BlockingQueue<String> playerTypeQueue, BlockingQueue<Boolean> playAgainQueue, BlockingQueue<Integer> moveQueue, View view, PlayerFactory playerFactory) {
+    public GuiTicTacToeApplication(BlockingQueue<String> playerTypeQueue, BlockingQueue<Boolean> playAgainQueue,
+                                   BlockingQueue<Integer> moveQueue, View view, PlayerFactory playerFactory) {
         super(playerFactory);
         this.playerTypeQueue = playerTypeQueue;
         this.playAgainQueue = playAgainQueue;

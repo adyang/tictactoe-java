@@ -6,24 +6,32 @@ import game.Player;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.ArrayBlockingQueue;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class DefaultPlayerFactoryTest {
-
     private PlayerFactory playerFactory;
     private ThreeByThreeBoard board;
 
     @Before
     public void setUp() throws Exception {
-        playerFactory = new DefaultPlayerFactory(System.in, System.out);
+        playerFactory = new DefaultPlayerFactory(System.in, System.out, new ArrayBlockingQueue<>(1));
         board = new ThreeByThreeBoard();
     }
 
     @Test
-    public void createHumanPlayer() {
-        Player player = playerFactory.createPlayer("human", 'X', board, 'O');
-        assertTrue(player instanceof HumanPlayer);
+    public void createConsoleHumanPlayer() {
+        Player player = playerFactory.createPlayer("consoleHuman", 'X', board, 'O');
+        assertTrue(player instanceof ConsoleHumanPlayer);
+        assertEquals('X', player.getMarker());
+    }
+
+    @Test
+    public void createGuiHumanPlayer() {
+        Player player = playerFactory.createPlayer("guiHuman", 'X', board, 'O');
+        assertTrue(player instanceof GuiHumanPlayer);
         assertEquals('X', player.getMarker());
     }
 

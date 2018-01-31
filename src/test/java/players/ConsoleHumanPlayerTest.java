@@ -1,7 +1,12 @@
 package players;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import boards.ThreeByThreeBoard;
+import console.InputTestUtil;
+import game.Board;
+import game.Player;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,15 +14,10 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
-import console.InputTestUtil;
-import game.Board;
-import game.Player;
-import boards.ThreeByThreeBoard;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class HumanPlayerTest {
+public class ConsoleHumanPlayerTest {
 	private Board board;
 	private Player player;
 	private ByteArrayOutputStream outputStream;
@@ -76,7 +76,7 @@ public class HumanPlayerTest {
 
 	private void makeMoveWithInput(String... userInputs) {
 		inputStream = createInputStreamWith(userInputs);
-		player = new HumanPlayer('X', board, inputStream, new PrintStream(outputStream));
+		player = new ConsoleHumanPlayer('X', board, inputStream, new PrintStream(outputStream));
 
 		player.makeMove();
 	}

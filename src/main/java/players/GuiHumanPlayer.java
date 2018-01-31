@@ -27,7 +27,7 @@ public class GuiHumanPlayer implements Player {
             int selectedMove = moveQueue.take();
             board.mark(selectedMove, getMarker());
         } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while waiting for move input.", e);
+            System.out.println("Interrupted while waiting for move input. Game Exiting...");
         }
     }
 }
