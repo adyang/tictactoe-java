@@ -1,6 +1,10 @@
-package gui;
+package gui.javafx;
 
 import application.PlayerNumber;
+import gui.DisplayBoard;
+import gui.DisplayGameConfig;
+import gui.View;
+import gui.javafx.JavaFxView;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -9,8 +13,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import org.junit.Assert;
 import org.junit.Test;
+import org.testfx.api.FxAssert;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.matcher.base.NodeMatchers;
+import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +35,7 @@ import static org.junit.Assert.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.hasText;
 import static org.testfx.matcher.base.NodeMatchers.isInvisible;
+import static org.testfx.util.WaitForAsyncUtils.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 public class JavaFxViewIntegrationTest extends ApplicationTest {
@@ -59,7 +68,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
 
         waitForFxEvents();
         GridPane boardGrid = lookup("#board").query();
-        assertEquals(9, boardGrid.getChildren().size());
+        Assert.assertEquals(9, boardGrid.getChildren().size());
     }
 
     @Test
@@ -72,9 +81,9 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayBoard(board);
 
         waitForFxEvents();
-        verifyThat("#cell-5", hasText("X"));
+        FxAssert.verifyThat("#cell-5", NodeMatchers.hasText("X"));
         assertGridPosition("#cell-5", 2, 1);
-        verifyThat("#cell-6", hasText("O"));
+        FxAssert.verifyThat("#cell-6", NodeMatchers.hasText("O"));
         assertGridPosition("#cell-6", 0, 2);
     }
 
@@ -86,7 +95,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         displayAndClickOnAllCells(board);
 
         waitForFxEvents();
-        assertEquals(listOfIntegersInRange(0, 9), triggeredCells);
+        Assert.assertEquals(listOfIntegersInRange(0, 9), triggeredCells);
     }
 
     @Test
@@ -110,7 +119,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         clickOn("#cell-0");
         clickOnAllCells();
 
-        assertEquals(Arrays.asList(0), triggeredCells);
+        Assert.assertEquals(Arrays.asList(0), triggeredCells);
     }
 
     @Test
@@ -120,8 +129,8 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayBoard(board);
 
         waitForFxEvents();
-        assertNotSame(dummyGroup, scene.getRoot());
-        assertTrue(lookup("#game-scene").tryQuery().isPresent());
+        Assert.assertNotSame(dummyGroup, scene.getRoot());
+        Assert.assertTrue(lookup("#game-scene").tryQuery().isPresent());
     }
 
     @Test
@@ -132,7 +141,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayCurrentMarker("X");
 
         waitForFxEvents();
-        verifyThat("#game-message", hasText("X player's Turn"));
+        FxAssert.verifyThat("#game-message", NodeMatchers.hasText("X player's Turn"));
     }
 
     @Test
@@ -143,7 +152,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayWinner("X");
 
         waitForFxEvents();
-        verifyThat("#game-message", hasText("X has Won!"));
+        FxAssert.verifyThat("#game-message", NodeMatchers.hasText("X has Won!"));
     }
 
     @Test
@@ -154,7 +163,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayDraw();
 
         waitForFxEvents();
-        verifyThat("#game-message", hasText("Draw!"));
+        FxAssert.verifyThat("#game-message", NodeMatchers.hasText("Draw!"));
     }
 
     @Test
@@ -162,8 +171,8 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayWelcome();
 
         waitForFxEvents();
-        assertNotSame(dummyGroup, scene.getRoot());
-        assertTrue(lookup("#welcome-scene").tryQuery().isPresent());
+        Assert.assertNotSame(dummyGroup, scene.getRoot());
+        Assert.assertTrue(lookup("#welcome-scene").tryQuery().isPresent());
     }
 
     @Test
@@ -171,7 +180,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayWelcome();
 
         waitForFxEvents();
-        verifyThat("#welcome-message", hasText("Tic-Tac-Toe"));
+        FxAssert.verifyThat("#welcome-message", NodeMatchers.hasText("Tic-Tac-Toe"));
     }
 
     @Test
@@ -183,7 +192,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayGameConfig(gameConfig);
 
         waitForFxEvents();
-        verifyThat("#player-one .config-name", hasText("Player One"));
+        FxAssert.verifyThat("#player-one .config-name", NodeMatchers.hasText("Player One"));
         assertOptionsHasText("#player-one .config-option", DISPLAY_PLAYER_TYPES);
     }
 
@@ -196,7 +205,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayGameConfig(gameConfig);
 
         waitForFxEvents();
-        verifyThat("#player-two .config-name", hasText("Player Two"));
+        FxAssert.verifyThat("#player-two .config-name", NodeMatchers.hasText("Player Two"));
         assertOptionsHasText("#player-two .config-option", DISPLAY_PLAYER_TYPES);
     }
 
@@ -209,7 +218,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayGameConfig(gameConfig);
 
         waitForFxEvents();
-        verifyThat("#play", hasText("Play"));
+        FxAssert.verifyThat("#play", NodeMatchers.hasText("Play"));
     }
 
     @Test
@@ -224,7 +233,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
 
         waitForFxEvents();
         clickOn("#play");
-        assertTrue(hasHandlerRan.get());
+        Assert.assertTrue(hasHandlerRan.get());
     }
 
     @Test
@@ -235,7 +244,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayPlayAgain(null);
 
         waitForFxEvents();
-        verifyThat("#play-again", hasText("Play Again?"));
+        FxAssert.verifyThat("#play-again", NodeMatchers.hasText("Play Again?"));
     }
 
     @Test
@@ -248,7 +257,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
 
         waitForFxEvents();
         clickOn("#play-again");
-        assertTrue(hasHandlerRan.get());
+        Assert.assertTrue(hasHandlerRan.get());
     }
 
     @Test
@@ -260,7 +269,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.hidePlayAgain();
 
         waitForFxEvents();
-        verifyThat("#play-again-container", isInvisible());
+        FxAssert.verifyThat("#play-again-container", NodeMatchers.isInvisible());
     }
 
     @Test
@@ -274,7 +283,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> isValidGameConfig.set(view.validateGameConfig()));
 
         waitForFxEvents();
-        assertFalse(isValidGameConfig.get());
+        Assert.assertFalse(isValidGameConfig.get());
     }
 
     @Test
@@ -287,7 +296,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> view.validateGameConfig());
 
         waitForFxEvents();
-        verifyThat("#player-one .error-message", hasText("Please select player type for Player One."));
+        FxAssert.verifyThat("#player-one .error-message", NodeMatchers.hasText("Please select player type for Player One."));
     }
 
     @Test
@@ -300,7 +309,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> view.validateGameConfig());
 
         waitForFxEvents();
-        verifyThat("#player-two .error-message", hasText("Please select player type for Player Two."));
+        FxAssert.verifyThat("#player-two .error-message", NodeMatchers.hasText("Please select player type for Player Two."));
     }
 
     @Test
@@ -317,7 +326,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> isValidGameConfig.set(view.validateGameConfig()));
 
         waitForFxEvents();
-        assertTrue(isValidGameConfig.get());
+        Assert.assertTrue(isValidGameConfig.get());
     }
 
     @Test
@@ -334,8 +343,8 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> view.validateGameConfig());
 
         waitForFxEvents();
-        verifyThat("#player-one .error-message", isInvisible());
-        verifyThat("#player-two .error-message", isInvisible());
+        FxAssert.verifyThat("#player-one .error-message", NodeMatchers.isInvisible());
+        FxAssert.verifyThat("#player-two .error-message", NodeMatchers.isInvisible());
     }
 
     @Test
@@ -351,7 +360,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> playerType.set(view.getPlayerTypeFor(PlayerNumber.ONE)));
 
         waitForFxEvents();
-        assertEquals(DISPLAY_OPTION_HUMAN, playerType.get());
+        Assert.assertEquals(DISPLAY_OPTION_HUMAN, playerType.get());
     }
 
     @Test
@@ -367,7 +376,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> playerType.set(view.getPlayerTypeFor(PlayerNumber.TWO)));
 
         waitForFxEvents();
-        assertEquals(DISPLAY_OPTION_COMPUTER, playerType.get());
+        Assert.assertEquals(DISPLAY_OPTION_COMPUTER, playerType.get());
     }
 
     private void clickOnOption(String lookupQuery, String targetOption) {
@@ -396,8 +405,8 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
 
     private void assertGridPosition(String cellIdSelector, int columnIdx, int rowIdx) {
         Label cell = lookup(cellIdSelector).query();
-        assertEquals(columnIdx, GridPane.getColumnIndex(cell).intValue());
-        assertEquals(rowIdx, GridPane.getRowIndex(cell).intValue());
+        Assert.assertEquals(columnIdx, GridPane.getColumnIndex(cell).intValue());
+        Assert.assertEquals(rowIdx, GridPane.getRowIndex(cell).intValue());
     }
 
     private DisplayBoard createBoardWithTriggerHandlerCells(List<Integer> triggeredCells) {

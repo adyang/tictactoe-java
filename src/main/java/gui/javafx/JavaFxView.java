@@ -1,6 +1,9 @@
-package gui;
+package gui.javafx;
 
 import application.PlayerNumber;
+import gui.DisplayBoard;
+import gui.DisplayGameConfig;
+import gui.View;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;

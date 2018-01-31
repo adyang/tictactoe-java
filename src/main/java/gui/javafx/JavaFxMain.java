@@ -1,6 +1,8 @@
-package gui;
+package gui.javafx;
 
 import application.PlayerFactory;
+import gui.GuiTicTacToeApplication;
+import gui.View;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
