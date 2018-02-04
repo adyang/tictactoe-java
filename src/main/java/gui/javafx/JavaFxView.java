@@ -22,8 +22,8 @@ import java.util.*;
 import static gui.DisplayBoard.DisplayCell;
 
 public class JavaFxView implements View {
-    public static final String PLAYER_ONE_DISPLAY_NAME = "Player One";
-    public static final String PLAYER_TWO_DISPLAY_NAME = "Player Two";
+    public static final String PLAYER_ONE_DISPLAY_NAME = "Player One (X)";
+    public static final String PLAYER_TWO_DISPLAY_NAME = "Player Two (O)";
     private final Scene scene;
     private final GameScene gameScene;
     private final WelcomeScene welcomeScene;

@@ -81,9 +81,9 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayBoard(board);
 
         waitForFxEvents();
-        FxAssert.verifyThat("#cell-5", NodeMatchers.hasText("X"));
+        verifyThat("#cell-5", NodeMatchers.hasText("X"));
         assertGridPosition("#cell-5", 2, 1);
-        FxAssert.verifyThat("#cell-6", NodeMatchers.hasText("O"));
+        verifyThat("#cell-6", NodeMatchers.hasText("O"));
         assertGridPosition("#cell-6", 0, 2);
     }
 
@@ -141,7 +141,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayCurrentMarker("X");
 
         waitForFxEvents();
-        FxAssert.verifyThat("#game-message", NodeMatchers.hasText("X player's Turn"));
+        verifyThat("#game-message", NodeMatchers.hasText("X player's Turn"));
     }
 
     @Test
@@ -152,7 +152,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayWinner("X");
 
         waitForFxEvents();
-        FxAssert.verifyThat("#game-message", NodeMatchers.hasText("X has Won!"));
+        verifyThat("#game-message", NodeMatchers.hasText("X has Won!"));
     }
 
     @Test
@@ -163,7 +163,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayDraw();
 
         waitForFxEvents();
-        FxAssert.verifyThat("#game-message", NodeMatchers.hasText("Draw!"));
+        verifyThat("#game-message", NodeMatchers.hasText("Draw!"));
     }
 
     @Test
@@ -180,7 +180,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayWelcome();
 
         waitForFxEvents();
-        FxAssert.verifyThat("#welcome-message", NodeMatchers.hasText("Tic-Tac-Toe"));
+        verifyThat("#welcome-message", NodeMatchers.hasText("Tic-Tac-Toe"));
     }
 
     @Test
@@ -192,7 +192,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayGameConfig(gameConfig);
 
         waitForFxEvents();
-        FxAssert.verifyThat("#player-one .config-name", NodeMatchers.hasText("Player One"));
+        verifyThat("#player-one .config-name", NodeMatchers.hasText("Player One (X)"));
         assertOptionsHasText("#player-one .config-option", DISPLAY_PLAYER_TYPES);
     }
 
@@ -205,7 +205,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayGameConfig(gameConfig);
 
         waitForFxEvents();
-        FxAssert.verifyThat("#player-two .config-name", NodeMatchers.hasText("Player Two"));
+        verifyThat("#player-two .config-name", NodeMatchers.hasText("Player Two (O)"));
         assertOptionsHasText("#player-two .config-option", DISPLAY_PLAYER_TYPES);
     }
 
@@ -218,7 +218,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayGameConfig(gameConfig);
 
         waitForFxEvents();
-        FxAssert.verifyThat("#play", NodeMatchers.hasText("Play"));
+        verifyThat("#play", NodeMatchers.hasText("Play"));
     }
 
     @Test
@@ -244,7 +244,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.displayPlayAgain(null);
 
         waitForFxEvents();
-        FxAssert.verifyThat("#play-again", NodeMatchers.hasText("Play Again?"));
+        verifyThat("#play-again", NodeMatchers.hasText("Play Again?"));
     }
 
     @Test
@@ -269,7 +269,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         view.hidePlayAgain();
 
         waitForFxEvents();
-        FxAssert.verifyThat("#play-again-container", NodeMatchers.isInvisible());
+        verifyThat("#play-again-container", NodeMatchers.isInvisible());
     }
 
     @Test
@@ -296,7 +296,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> view.validateGameConfig());
 
         waitForFxEvents();
-        FxAssert.verifyThat("#player-one .error-message", NodeMatchers.hasText("Please select player type for Player One."));
+        verifyThat("#player-one .error-message", NodeMatchers.hasText("Please select player type for Player One."));
     }
 
     @Test
@@ -309,7 +309,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> view.validateGameConfig());
 
         waitForFxEvents();
-        FxAssert.verifyThat("#player-two .error-message", NodeMatchers.hasText("Please select player type for Player Two."));
+        verifyThat("#player-two .error-message", NodeMatchers.hasText("Please select player type for Player Two."));
     }
 
     @Test
@@ -343,8 +343,8 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> view.validateGameConfig());
 
         waitForFxEvents();
-        FxAssert.verifyThat("#player-one .error-message", NodeMatchers.isInvisible());
-        FxAssert.verifyThat("#player-two .error-message", NodeMatchers.isInvisible());
+        verifyThat("#player-one .error-message", NodeMatchers.isInvisible());
+        verifyThat("#player-two .error-message", NodeMatchers.isInvisible());
     }
 
     @Test
