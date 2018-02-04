@@ -21,6 +21,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     integrationTestCompile 'org.testfx:testfx-core:4.0.10-alpha'
     integrationTestCompile 'org.testfx:testfx-junit:4.0.10-alpha'
+    integrationTestCompile 'org.testfx:openjfx-monocle:8u76-b04'
 }
 
 mainClassName = 'console.TicTacToeApplication'
