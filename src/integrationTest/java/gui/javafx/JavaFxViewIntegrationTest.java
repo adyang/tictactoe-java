@@ -296,7 +296,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> view.validateGameConfig());
 
         waitForFxEvents();
-        verifyThat("#player-one .error-message", NodeMatchers.hasText("Please select player type for Player One."));
+        verifyThat("#player-one .error-message", NodeMatchers.hasText("Please select player type for Player One (X)."));
     }
 
     @Test
@@ -309,7 +309,7 @@ public class JavaFxViewIntegrationTest extends ApplicationTest {
         Platform.runLater(() -> view.validateGameConfig());
 
         waitForFxEvents();
-        verifyThat("#player-two .error-message", NodeMatchers.hasText("Please select player type for Player Two."));
+        verifyThat("#player-two .error-message", NodeMatchers.hasText("Please select player type for Player Two (O)."));
     }
 
     @Test
