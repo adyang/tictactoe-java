@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/adyang/tictactoe-java.svg?branch=master)](https://travis-ci.org/adyang/tictactoe-java)
+
 Tic-Tac-Toe in Java
 ====================
 
