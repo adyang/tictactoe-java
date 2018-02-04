@@ -24,8 +24,13 @@ dependencies {
     integrationTestCompile 'org.testfx:openjfx-monocle:8u76-b04'
 }
 
-mainClassName = 'console.TicTacToeApplication'
-run.standardInput = System.in
+def gameType = project.findProperty("gameType") ?: 'console'
+if (gameType == 'gui') {
+    mainClassName = 'gui.javafx.JavaFxMain'
+} else {
+    mainClassName = 'console.ConsoleMain'
+    run.standardInput = System.in
+}
 
 task integrationTest(type: Test, group: 'verification', description: 'Runs the integration tests.') {
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
