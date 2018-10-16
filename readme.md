@@ -11,6 +11,10 @@ The program was first written as a console program and later extended to include
 Running Instructions
 ---------------------
 * JDK 8 is required.
+* Prefix commands with JAVA_HOME=Path/To/JDK/Version to ensure that JDK 8 is used, e.g. for macOS
+    ```
+    JAVA_HOME=$(/usr/libexec/java_home -v 1.8) ./gradlew clean check
+    ```
 * For Windows, replace "./gradlew" with "./gradlew.bat".
 
 1. To run Console game: ./gradlew run -PgameType=console --console=plain -q
