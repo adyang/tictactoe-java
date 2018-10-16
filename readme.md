@@ -10,7 +10,7 @@ The program was first written as a console program and later extended to include
 
 Running Instructions
 ---------------------
-* Tested on JDK 8
+* JDK 8 is required.
 * For Windows, replace "./gradlew" with "./gradlew.bat".
 
 1. To run Console game: ./gradlew run -PgameType=console --console=plain -q
