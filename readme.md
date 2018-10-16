@@ -17,6 +17,6 @@ Running Instructions
     ```
 * For Windows, replace "./gradlew" with "./gradlew.bat".
 
-1. To run Console game: ./gradlew run -PgameType=console --console=plain -q
-2. To run GUI game: ./gradlew run -PgameType=gui -q
-3. To run all tests: ./gradlew clean check
+1. To run Console game: `./gradlew run -PgameType=console --console=plain -q`
+2. To run GUI game: `./gradlew run -PgameType=gui -q`
+3. To run all tests: `./gradlew clean check`
